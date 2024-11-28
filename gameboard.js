@@ -3,6 +3,11 @@ const Ship = require('./ship.js');
 class Gameboard {
 	constructor() {
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
+		this.aircraftCarrier = new Ship(5, 0);
+		this.battleship = new Ship(4, 0);
+		this.cruiser = new Ship(3, 0);
+		this.destroyer = new Ship(2, 0);
+		this.submarine = new Ship(1, 0);
 	}
 
 	getBoard() {
@@ -22,5 +27,5 @@ class Gameboard {
 }
 
 const gb = new Gameboard();
-console.log(gb.board);
+console.log(gb);
 module.exports = Gameboard;

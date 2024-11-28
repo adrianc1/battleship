@@ -1,5 +1,5 @@
 module.exports = class Ship {
-	constructor(len, hits, sunk) {
+	constructor(len, hits, sunk = false) {
 		(this.len = len), (this.hits = hits), (this.sunk = sunk);
 	}
 	hit() {

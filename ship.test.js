@@ -5,7 +5,7 @@ describe('Ship Object and Methods working', () => {
 	const ship = new Ship(5, 0);
 
 	test('Ship object created', () => {
-		expect(ship).toEqual({ len: 5, hits: 0 });
+		expect(ship).toEqual({ len: 5, hits: 0, sunk: false });
 	});
 	test('hit method exists', () => {
 		expect(typeof ship.hit).toBe('function');
