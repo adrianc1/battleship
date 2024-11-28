@@ -1,4 +1,5 @@
 const Ship = require('./ship.js');
+const Gameboard = require('./gameboard.js');
 
 describe('Ship Object and Methods working', () => {
 	const ship = new Ship(5, 0);
@@ -27,5 +28,15 @@ describe('testing hit and is sunk methods', () => {
 	});
 	test('Small small has sunk!', () => {
 		expect(smallShip.sunk).toBeTruthy();
+	});
+});
+
+describe('Gameboard testing', () => {
+	const playergb = new Gameboard();
+	playergb.board[1][2] = 'x';
+	test('receiveAttack coordinates', () => {
+		expect(playergb.receiveAttack()).toEqual('Please Enter Coordinates');
+		expect(playergb.receiveAttack(3, 3)).toEqual('Miss!');
+		expect(playergb.receiveAttack(1, 2)).toEqual('Hit!');
 	});
 });
