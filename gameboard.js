@@ -10,6 +10,36 @@ class Gameboard {
 		this.submarine = new Ship(1, 0);
 	}
 
+	setShip(x, y, ship) {
+		const Xmoves = [1, -1, 0, 0];
+		const Ymoves = [0, 0, 1, -1];
+		let count = 0;
+
+		if (this.hasOwnProperty(ship)) {
+			this.board[x][y] = ship;
+			let shipValues = this[ship];
+			count++;
+
+			while (count < shipValues.len) {
+				for (let i = 0; i < Xmoves.length; i++) {
+					let nx = x + Xmoves[i];
+					let ny = y + Ymoves[i];
+
+					if (nx < 0 || ny < 0) continue;
+					if (nx > 10 || ny > 10) continue;
+
+					this.board[nx][ny] = ship;
+					x = nx;
+					y = ny;
+					count++;
+					break;
+				}
+			}
+			return this[ship];
+		}
+		return 'Not a valid ship';
+	}
+
 	getBoard() {
 		return this.board;
 	}
@@ -27,5 +57,8 @@ class Gameboard {
 }
 
 const gb = new Gameboard();
+
+gb.setShip(0, 0, 'aircraftCarrier');
+
 console.log(gb);
 module.exports = Gameboard;
