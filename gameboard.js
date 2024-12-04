@@ -14,7 +14,7 @@ class Gameboard {
 		const Xmoves = [1, -1, 0, 0];
 		const Ymoves = [0, 0, 1, -1];
 		let count = 0;
-		let isHorizontal = true;
+		let isHorizontal = false;
 
 		if (this.hasOwnProperty(ship)) {
 			this.board[x][y] = ship;
@@ -33,11 +33,14 @@ class Gameboard {
 						this.board[nx][y] = ship;
 						x = nx;
 					} else {
+						let ny = y + 1;
 						if (y + 1 > 10) {
-							isHorizontal = false;
+							isHorizontal = true;
 							break;
 						}
+						count++;
 						this.board[x][y + 1] = ship;
+						y = ny;
 					}
 				}
 			}
