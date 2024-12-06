@@ -67,7 +67,10 @@ class Gameboard {
 
 	isHit(x, y) {
 		const shipString = this.board[x][y];
-		this[shipString].hits;
+		this.board[x][y] = 'x!';
+		this[shipString].hit();
+
+		console.log(this[shipString]);
 		return;
 	}
 
@@ -78,6 +81,7 @@ class Gameboard {
 			this.isHit(x, y);
 			return 'Hit!';
 		}
+		this.board[x][y] = 'x';
 		return 'Miss!';
 	}
 }
@@ -88,5 +92,9 @@ gb.setShip(1, 4, 'cruiser', false);
 gb.setShip(6, 6, 'destroyer');
 gb.setShip(9, 9, 'submarine');
 gb.setShip(2, 3, 'battleship', false);
+gb.receiveAttack(9, 9);
+
+gb.receiveAttack(2, 0);
+gb.receiveAttack(2, 9);
 console.log(gb);
 module.exports = Gameboard;
