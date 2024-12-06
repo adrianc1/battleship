@@ -10,59 +10,53 @@ class Gameboard {
 		this.submarine = new Ship(1, 0);
 	}
 
-	setShip(x, y, ship) {
-		const Xmoves = [1, -1, 0, 0];
-		const Ymoves = [0, 0, 1, -1];
-		let count = 0;
-		let isHorizontal = false;
-
+	// set ship on board
+	setShip(row, col, ship, isHorizontal = true) {
+		// check if ship is valid
 		if (this.hasOwnProperty(ship)) {
-			this.board[x][y] = ship;
+			let count = 0;
 			let shipValues = this[ship];
+			let lastColSquare = col + shipValues.len - 1;
+			let lastRowSquare = row + shipValues.len - 1;
+
+			// check if the boat will be off the board
+			if (
+				lastColSquare > 9 ||
+				lastColSquare < 0 ||
+				lastRowSquare > 9 ||
+				lastRowSquare < 0
+			) {
+				return 'Not a valid placement';
+			}
+
+			this.board[row][col] = ship;
 			count++;
 
+			// iterate over grid
 			while (count < shipValues.len) {
 				for (let i = 1; i < shipValues.len; i++) {
+					// check if ship can be placed horizontal
 					if (isHorizontal) {
-						let nx = x + 1;
-						if (x + 1 > 10) {
-							isHorizontal = false;
-							break;
+						let nextCol = col + 1;
+						if (nextCol > 9 || nextCol < 0) {
+							return 'Not a valid placement';
 						}
+
+						this.board[row][nextCol] = ship;
+						col = nextCol;
 						count++;
-						this.board[nx][y] = ship;
-						x = nx;
 					} else {
-						let ny = y + 1;
-						if (y + 1 > 10) {
-							isHorizontal = true;
-							break;
+						let nextRow = row + 1;
+						if (nextRow > 9 || nextRow < 0) {
+							return 'Not a valid placement';
 						}
 						count++;
-						this.board[x][y + 1] = ship;
-						y = ny;
+						this.board[nextRow][col] = ship;
+						row = nextRow;
 					}
 				}
 			}
-		}
-
-		if (this.hasOwnProperty(ship)) {
-			// while (count < shipValues.len) {
-			// 	for (let i = 0; i < Xmoves.length; i++) {
-			// 		let nx = x + Xmoves[i];
-			// 		let ny = y + Ymoves[i];
-
-			// 		if (nx < 0 || ny < 0) continue;
-			// 		if (nx > 10 || ny > 10) continue;
-
-			// 		this.board[nx][ny] = ship;
-			// 		x = nx;
-			// 		y = ny;
-			// 		count++;
-			// 		break;
-			// 	}
-			// }
-			return this[ship];
+			return ship;
 		}
 		return 'Not a valid ship';
 	}
@@ -71,12 +65,17 @@ class Gameboard {
 		return this.board;
 	}
 
-	isHit(x, y) {}
+	isHit(x, y) {
+		const shipString = this.board[x][y];
+		this[shipString].hits;
+		return;
+	}
 
 	receiveAttack(x, y) {
 		if (arguments.length === 0) return 'Please Enter Coordinates';
 
 		if (this.board[x][y] != null) {
+			this.isHit(x, y);
 			return 'Hit!';
 		}
 		return 'Miss!';
@@ -84,8 +83,10 @@ class Gameboard {
 }
 
 const gb = new Gameboard();
-
-gb.setShip(0, 0, 'cruiser');
-
+gb.setShip(0, 0, 'aircraftCarrier');
+gb.setShip(1, 4, 'cruiser', false);
+gb.setShip(6, 6, 'destroyer');
+gb.setShip(9, 9, 'submarine');
+gb.setShip(2, 3, 'battleship', false);
 console.log(gb);
 module.exports = Gameboard;
