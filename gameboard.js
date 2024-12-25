@@ -10,11 +10,6 @@ class Gameboard {
 			destroyer: new Ship(2, 0),
 			submarine: new Ship(1, 0),
 		};
-		this.aircraftCarrier = new Ship(5, 0);
-		this.battleship = new Ship(4, 0);
-		this.cruiser = new Ship(3, 0);
-		this.destroyer = new Ship(2, 0);
-		this.submarine = new Ship(1, 0);
 		this.misses = 0;
 		this.totalHits = 0;
 		this.totalShots = this.misses + this.totalHits;
@@ -23,9 +18,9 @@ class Gameboard {
 	// set ship on board
 	setShip(row, col, ship, isHorizontal = true) {
 		// check if ship is valid
-		if (this.hasOwnProperty(ship)) {
+		if (this.ships.hasOwnProperty(ship)) {
 			let count = 0;
-			let shipValues = this[ship];
+			let shipValues = this.ships[ship];
 			let lastColSquare = col + shipValues.len - 1;
 			let lastRowSquare = row + shipValues.len - 1;
 
@@ -78,7 +73,7 @@ class Gameboard {
 	isHit(x, y) {
 		const shipString = this.board[x][y];
 		this.board[x][y] = 'x!';
-		this[shipString].hit();
+		this.ships[shipString].hit();
 
 		this.totalHits += 1;
 		return;
@@ -97,18 +92,21 @@ class Gameboard {
 	}
 
 	shipsRemaining() {
-		return 'All ships sunk!';
+		let startingShips = Object.keys(this.ships).length;
+		let sunkedShips = 0;
+
+		Object.entries(this.ships).forEach((e) => {
+			if (e[1].sunk) {
+				console.log(e[0], 'has been sunk!!');
+				sunkedShips++;
+			}
+		});
+		if (sunkedShips >= startingShips) {
+			return 'All ships sunk!';
+		}
+
+		return startingShips - sunkedShips;
 	}
 }
-
-// class Player {
-// 	constructor() {
-// 		this.playerGameboard = new Gameboard();
-// 	}
-// }
-
-const gb = new Gameboard();
-
-console.log(Object.keys(gb.ships).length);
 
 module.exports = Gameboard;

@@ -63,11 +63,11 @@ describe('receiving hits', () => {
 	gb.receiveAttack(0, 0);
 
 	it('should display hit marker and sink ship', () => {
-		expect(gb.submarine.sunk).toEqual(true);
+		expect(gb.ships.submarine.sunk).toEqual(true);
 	});
 
 	it('should display hit marker and not sink ship', () => {
-		expect(gb.aircraftCarrier.sunk).toEqual(false);
+		expect(gb.ships.aircraftCarrier.sunk).toEqual(false);
 		expect(gb.board[0][0]).toEqual('x!');
 	});
 
@@ -80,6 +80,11 @@ describe('receiving hits', () => {
 
 describe('report starting number of ships', () => {
 	const gb = new Gameboard();
+	gb.setShip(0, 0, 'aircraftCarrier');
+	gb.setShip(1, 4, 'cruiser', false);
+	gb.setShip(6, 6, 'destroyer');
+	gb.setShip(9, 9, 'submarine');
+	gb.setShip(2, 3, 'battleship', false);
 
 	it('should report the starting number of ships', () => {
 		expect(gb.shipsRemaining()).toEqual(5);
@@ -88,6 +93,13 @@ describe('report starting number of ships', () => {
 
 describe('report remaining ships after they one is sunk', () => {
 	const gb = new Gameboard();
+	gb.setShip(0, 0, 'aircraftCarrier');
+	gb.setShip(1, 4, 'cruiser', false);
+	gb.setShip(6, 6, 'destroyer');
+	gb.setShip(9, 9, 'submarine');
+	gb.setShip(2, 3, 'battleship', false);
+
+	gb.receiveAttack(9, 9);
 
 	it('should report the remaining number of ships', () => {
 		expect(gb.shipsRemaining()).toEqual(4);
@@ -96,6 +108,26 @@ describe('report remaining ships after they one is sunk', () => {
 
 describe('report gameover, all ships sunk', () => {
 	const gb = new Gameboard();
+	gb.setShip(0, 0, 'aircraftCarrier');
+	gb.setShip(1, 4, 'cruiser', false);
+	gb.setShip(6, 6, 'destroyer');
+	gb.setShip(9, 9, 'submarine');
+	gb.setShip(2, 3, 'battleship', false);
+	gb.receiveAttack(9, 9);
+	gb.receiveAttack(0, 0);
+	gb.receiveAttack(0, 1);
+	gb.receiveAttack(0, 2);
+	gb.receiveAttack(0, 3);
+	gb.receiveAttack(0, 4);
+	gb.receiveAttack(6, 6);
+	gb.receiveAttack(6, 7);
+	gb.receiveAttack(2, 3);
+	gb.receiveAttack(3, 3);
+	gb.receiveAttack(4, 3);
+	gb.receiveAttack(5, 3);
+	gb.receiveAttack(1, 4);
+	gb.receiveAttack(2, 4);
+	gb.receiveAttack(3, 4);
 
 	it('should report that all ships have been sunk', () => {
 		expect(gb.shipsRemaining()).toEqual('All ships sunk!');
