@@ -3,11 +3,21 @@ const Ship = require('./ship.js');
 class Gameboard {
 	constructor() {
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
+		this.ships = {
+			aircraftCarrier: new Ship(5, 0),
+			battleship: new Ship(4, 0),
+			cruiser: new Ship(3, 0),
+			destroyer: new Ship(2, 0),
+			submarine: new Ship(1, 0),
+		};
 		this.aircraftCarrier = new Ship(5, 0);
 		this.battleship = new Ship(4, 0);
 		this.cruiser = new Ship(3, 0);
 		this.destroyer = new Ship(2, 0);
 		this.submarine = new Ship(1, 0);
+		this.misses = 0;
+		this.totalHits = 0;
+		this.totalShots = this.misses + this.totalHits;
 	}
 
 	// set ship on board
@@ -70,31 +80,35 @@ class Gameboard {
 		this.board[x][y] = 'x!';
 		this[shipString].hit();
 
-		console.log(this[shipString]);
+		this.totalHits += 1;
 		return;
 	}
 
 	receiveAttack(x, y) {
 		if (arguments.length === 0) return 'Please Enter Coordinates';
 
-		if (this.board[x][y] != null) {
+		if (this.board[x][y] != null || this.board[x][y] != undefined) {
 			this.isHit(x, y);
 			return 'Hit!';
 		}
 		this.board[x][y] = 'x';
+		this.misses += 1;
 		return 'Miss!';
+	}
+
+	shipsRemaining() {
+		return 'All ships sunk!';
 	}
 }
 
-const gb = new Gameboard();
-gb.setShip(0, 0, 'aircraftCarrier');
-gb.setShip(1, 4, 'cruiser', false);
-gb.setShip(6, 6, 'destroyer');
-gb.setShip(9, 9, 'submarine');
-gb.setShip(2, 3, 'battleship', false);
-gb.receiveAttack(9, 9);
+// class Player {
+// 	constructor() {
+// 		this.playerGameboard = new Gameboard();
+// 	}
+// }
 
-gb.receiveAttack(2, 0);
-gb.receiveAttack(2, 9);
-console.log(gb);
+const gb = new Gameboard();
+
+console.log(Object.keys(gb.ships).length);
+
 module.exports = Gameboard;

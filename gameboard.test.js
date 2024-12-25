@@ -17,7 +17,17 @@ describe('Gameboard testing', () => {
 		expect(playergb.board[0][0]).toEqual('destroyer');
 		expect(playergb.setShip(0, 0, 'fakeShip')).toEqual('Not a valid ship');
 		expect(playergb.setShip(9, 9, 'cruiser')).toEqual('Not a valid placement');
+		expect(playergb.setShip(9, 9, 'cruiser', false)).toEqual(
+			'Not a valid placement'
+		);
+	});
+
+	it('should warn of non valid placement', () => {
 		expect(playergb.setShip(0, 8, 'aircraftCarrier')).toEqual(
+			'Not a valid placement'
+		);
+
+		expect(playergb.setShip(9, 9, 'aircraftCarrier', false)).toEqual(
 			'Not a valid placement'
 		);
 	});
@@ -41,15 +51,53 @@ describe('ship should span appropriate length', () => {
 
 describe('receiving hits', () => {
 	const gb = new Gameboard();
-
 	gb.setShip(0, 0, 'aircraftCarrier');
 	gb.setShip(1, 4, 'cruiser', false);
 	gb.setShip(6, 6, 'destroyer');
 	gb.setShip(9, 9, 'submarine');
 	gb.setShip(2, 3, 'battleship', false);
+	gb.receiveAttack(9, 9);
+	gb.receiveAttack(0, 6);
+	gb.receiveAttack(0, 7);
+	gb.receiveAttack(4, 7);
+	gb.receiveAttack(0, 0);
 
 	it('should display hit marker and sink ship', () => {
-		gb.receiveAttack(9, 9);
 		expect(gb.submarine.sunk).toEqual(true);
+	});
+
+	it('should display hit marker and not sink ship', () => {
+		expect(gb.aircraftCarrier.sunk).toEqual(false);
+		expect(gb.board[0][0]).toEqual('x!');
+	});
+
+	it('should display missed marker and keep track of misses', () => {
+		expect(gb.board[0][6]).toEqual('x');
+		expect(gb.misses).toEqual(3);
+		expect(gb.totalHits).toEqual(2);
+	});
+});
+
+describe('report starting number of ships', () => {
+	const gb = new Gameboard();
+
+	it('should report the starting number of ships', () => {
+		expect(gb.shipsRemaining()).toEqual(5);
+	});
+});
+
+describe('report remaining ships after they one is sunk', () => {
+	const gb = new Gameboard();
+
+	it('should report the remaining number of ships', () => {
+		expect(gb.shipsRemaining()).toEqual(4);
+	});
+});
+
+describe('report gameover, all ships sunk', () => {
+	const gb = new Gameboard();
+
+	it('should report that all ships have been sunk', () => {
+		expect(gb.shipsRemaining()).toEqual('All ships sunk!');
 	});
 });
