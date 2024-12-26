@@ -1,7 +1,8 @@
-const Gameboard = require('./gameboard.js');
+import { Gameboard, Player, Ship } from '../gameboard.js';
 
 describe('Gameboard testing', () => {
 	const playergb = new Gameboard();
+
 	playergb.setShip(2, 2, 'submarine');
 	it('should receive attack coordinates and display hit or miss', () => {
 		expect(playergb.receiveAttack()).toEqual('Please Enter Coordinates');
@@ -16,21 +17,14 @@ describe('Gameboard testing', () => {
 		expect(playergb.board[5][6]).toEqual('submarine');
 		expect(playergb.board[0][0]).toEqual('destroyer');
 		expect(playergb.setShip(0, 0, 'fakeShip')).toEqual('Not a valid ship');
-		expect(playergb.setShip(9, 9, 'cruiser')).toEqual('Not a valid placement');
-		expect(playergb.setShip(9, 9, 'cruiser', false)).toEqual(
-			'Not a valid placement'
-		);
+		expect(() => playergb.setShip(9, 9, 'cruiser')).toThrow();
+		expect(() => playergb.setShip(9, 9, 'cruiser', false)).toThrow();
 	});
+});
 
-	it('should warn of non valid placement', () => {
-		expect(playergb.setShip(0, 8, 'aircraftCarrier')).toEqual(
-			'Not a valid placement'
-		);
-
-		expect(playergb.setShip(9, 9, 'aircraftCarrier', false)).toEqual(
-			'Not a valid placement'
-		);
-	});
+test('should throw an error for invalid ship placement', () => {
+	const gameboard = new Gameboard();
+	expect(() => gameboard.setShip(0, 8, 'aircraftCarrier')).toThrow();
 });
 
 describe('ship should span appropriate length', () => {
@@ -131,5 +125,12 @@ describe('report gameover, all ships sunk', () => {
 
 	it('should report that all ships have been sunk', () => {
 		expect(gb.shipsRemaining()).toEqual('All ships sunk!');
+	});
+});
+
+describe('player class', () => {
+	const playergb = new Player();
+	it('should have a ships property', () => {
+		expect(playergb.board).toHaveProperty('ships');
 	});
 });

@@ -1,4 +1,4 @@
-const Ship = require('./ship.js');
+import { Ship } from '../gameboard.js';
 
 describe('Ship Object and Methods working', () => {
 	const ship = new Ship(5, 0);

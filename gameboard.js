@@ -1,6 +1,21 @@
-const Ship = require('./ship.js');
+export class Ship {
+	constructor(len, hits, sunk = false) {
+		(this.len = len), (this.hits = hits), (this.sunk = sunk);
+	}
+	hit() {
+		this.hits += 1;
+		this.sunk = this.isSunk();
+		return this.hits;
+	}
+	isSunk() {
+		if (this.hits >= this.len) {
+			return (this.sunk = true);
+		}
+		return false;
+	}
+}
 
-class Gameboard {
+export class Gameboard {
 	constructor() {
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
 		this.ships = {
@@ -31,7 +46,7 @@ class Gameboard {
 				lastRowSquare > 9 ||
 				lastRowSquare < 0
 			) {
-				return 'Not a valid placement';
+				throw new Error();
 			}
 
 			this.board[row][col] = ship;
@@ -44,7 +59,7 @@ class Gameboard {
 					if (isHorizontal) {
 						let nextCol = col + 1;
 						if (nextCol > 9 || nextCol < 0) {
-							return 'Not a valid placement';
+							throw new Error();
 						}
 
 						this.board[row][nextCol] = ship;
@@ -53,7 +68,7 @@ class Gameboard {
 					} else {
 						let nextRow = row + 1;
 						if (nextRow > 9 || nextRow < 0) {
-							return 'Not a valid placement';
+							throw new Error();
 						}
 						count++;
 						this.board[nextRow][col] = ship;
@@ -97,7 +112,6 @@ class Gameboard {
 
 		Object.entries(this.ships).forEach((e) => {
 			if (e[1].sunk) {
-				console.log(e[0], 'has been sunk!!');
 				sunkedShips++;
 			}
 		});
@@ -109,4 +123,10 @@ class Gameboard {
 	}
 }
 
-module.exports = Gameboard;
+export class Player {
+	constructor() {
+		this.board = new Gameboard();
+	}
+}
+
+// module.exports = { Gameboard, Player, Ship };
