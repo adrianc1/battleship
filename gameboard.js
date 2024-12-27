@@ -16,7 +16,8 @@ export class Ship {
 }
 
 export class Gameboard {
-	constructor() {
+	constructor(name = null) {
+		this.name = name;
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
 		this.ships = {
 			aircraftCarrier: new Ship(5, 0),
@@ -124,9 +125,7 @@ export class Gameboard {
 }
 
 export class Player {
-	constructor() {
-		this.board = new Gameboard();
+	constructor(name) {
+		this.board = new Gameboard(name);
 	}
 }
-
-// module.exports = { Gameboard, Player, Ship };

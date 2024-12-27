@@ -1,10 +1,79 @@
-html {
-	background-color: red;
+/* 1. Use a more-intuitive box-sizing model */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+/* 2. Remove default margin */
+* {
+	margin: 0;
 }
 
-.gameboard {
-	display: grid;
+body {
+	display: inline-flex;
+	flex-direction: column;
+	height: 100vh;
+	width: 100vw;
+}
+#main-container {
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+}
+
+#player-main,
+#computer-main {
 	height: 100%;
 	width: 100%;
+}
+#player-board-container,
+#computer-gameboard-container {
+	display: flex;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	border: 2px solid yellow;
+}
+
+.gb {
+	margin-top: 3rem;
+	display: grid;
+	border: 1px solid green;
+	height: 80%;
+	width: 80%;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(10, 1fr);
+	background-color: rgb(232, 232, 232);
+}
+
+.unit-cell {
+	min-height: 100%;
+	min-width: 100%;
 	border: 1px solid black;
+	word-wrap: break-word;
+}
+
+.unit-cell:hover {
+	background-color: aquamarine;
+}
+
+#nav-bar {
+	height: 5rem;
+	width: 100%;
+	display: flex;
+}
+
+#player-nav,
+#enemy-nav {
+	border: 3px solid pink;
+	width: 100%;
+}
+
+#player-nav > *,
+#enemy-nav > * {
+	line-height: 1.5rem;
+}
+
+#enemy-nav {
+	/* flex: 1; */
 }
