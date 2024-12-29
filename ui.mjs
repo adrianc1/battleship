@@ -1,4 +1,4 @@
-import { realPlayer, enemyPlayer } from './interactions.js';
+import { realPlayer, enemyPlayer } from './interactions.mjs';
 
 const playerContainer = document.getElementById('player-main');
 const playerGameboardEl = document.getElementById('player-gameboard');
@@ -10,15 +10,17 @@ let cpuBoard = enemyPlayer;
 
 // add each players board to the screen
 function renderStartingBoard(currBoard) {
+	let l = 0;
 	generalBoardEl.forEach((e) => {
-		console.log(e, currBoard);
 		if (currBoard.board.name == 'adrian') {
 			currBoard.board.board.forEach((row) => {
 				row.forEach((cell) => {
 					let newEl = document.createElement('div');
 					newEl.classList.add('unit-cell');
+					newEl.id = `p${l}`;
 					newEl.textContent = cell;
 					e.appendChild(newEl);
+					l++;
 				});
 			});
 			currBoard.board.name = null;
@@ -30,8 +32,10 @@ function renderStartingBoard(currBoard) {
 				row.forEach((cell) => {
 					let newEl = document.createElement('div');
 					newEl.classList.add('unit-cell');
+					newEl.id = `p${l}`;
 					newEl.textContent = cell;
 					e.appendChild(newEl);
+					l++;
 				});
 			});
 			return (currBoard.board.name = 'adrian');
@@ -39,7 +43,6 @@ function renderStartingBoard(currBoard) {
 	});
 	return;
 }
-
 // display nav and scoring
 (function navDisplay(player, evil) {
 	const navBar = document.getElementById('nav-bar');
@@ -63,8 +66,3 @@ function renderStartingBoard(currBoard) {
 })();
 
 renderStartingBoard(playerboard);
-
-// function displayShipBoard() {
-// 	if ()
-// 	.bar:nth-of-type(2)
-// }

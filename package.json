@@ -1,13 +1,10 @@
 {
 	"type": "module",
-	"devDependencies": {
-		"jest": "^29.7.0"
-	},
 	"private": true,
 	"scripts": {
 		"test": "node --experimental-vm-modules ./node_modules/.bin/jest"
 	},
-	"dependencies": {
-		"cross-env": "^7.0.3"
+	"devDependencies": {
+		"jest": "^29.7.0"
 	}
 }
