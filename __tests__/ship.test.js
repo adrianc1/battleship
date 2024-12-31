@@ -1,4 +1,4 @@
-import { Ship } from '../gameboard.js';
+import { Ship } from '../src/gameboard.js';
 
 describe('Ship Object and Methods working', () => {
 	const ship = new Ship(5, 0);

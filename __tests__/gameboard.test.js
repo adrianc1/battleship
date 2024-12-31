@@ -1,4 +1,4 @@
-import { Gameboard, Player, Ship } from '../gameboard.js';
+import { Gameboard, Player, Ship } from '../src/gameboard.js';
 
 describe('Gameboard testing', () => {
 	const playergb = new Gameboard();
