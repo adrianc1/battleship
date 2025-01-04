@@ -36,6 +36,8 @@ function playerTurn(boo) {
 function cpuTurn() {
 	let row = Math.floor(Math.random() * 10);
 	let col = Math.floor(Math.random() * 10);
+	realPlayer.board.receiveAttack(row, col);
+	attackCoordinate();
 }
 
 export { realPlayer, enemyPlayer, playerTurn };

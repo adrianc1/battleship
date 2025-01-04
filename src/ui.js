@@ -37,20 +37,17 @@ export function navDisplay(player, evil) {
 	enemyShipsRemaining.textContent += enemyPlayer.board.shipsRemaining();
 }
 
-export function attackCoordinate() {
-	let isSelected = this.classList.contains('active');
-	let isEnemy = this.classList.contains('enemy');
+export function attackCoordinate(element, hom) {
+	let isSelected = element.classList.contains('active');
+	let isEnemy = element.classList.contains('enemy');
 	if (isSelected) {
 		return;
+	} else if (hom == 'Hit!') {
+		element.classList.add('active');
+		element.textContent = hom;
+		element.classList.remove('ship-color');
 	} else {
-		this.classList.add('active');
-		this.classList.remove('ship-color');
-		if (isEnemy) {
-			enemyPlayer.board.receiveAttack(this.dataset.row, this.dataset.col);
-		} else {
-			realPlayer.board.receiveAttack(this.dataset.row, this.dataset.col);
-		}
-		navDisplay(realPlayer, enemyPlayer);
+		element.classList.add('active');
 	}
 }
 
@@ -62,40 +59,63 @@ function colorShips(cell) {
 
 function renderGameboard(currBoard) {
 	let l = 1;
-	let rowIndex = 0;
-	let colIndex = 0;
 
-	currBoard.board.board.forEach((row) => {
-		row.forEach((col) => {
+	currBoard.board.board.forEach((row, rowIndex) => {
+		row.forEach((col, colIndex) => {
 			let newDivElement = document.createElement('div');
 			newDivElement.classList.add('unit-cell');
 			newDivElement.dataset.row = rowIndex;
 			newDivElement.dataset.col = colIndex;
 			newDivElement.textContent = col;
-			newDivElement.addEventListener('click', attackCoordinate);
+			newDivElement.addEventListener('click', () => {
+				const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
+				attackCoordinate(newDivElement, hitOrMiss);
+			});
 			colorShips(newDivElement);
 
 			// render player board
 			if (currBoard.board.name == 'player') {
+				newDivElement.classList.add('player');
 				newDivElement.id = `player-cell-${l}`;
 				playerGameboardEl.appendChild(newDivElement);
 				l++;
-				colIndex++;
 				return;
 			} else {
 				newDivElement.id = `enemy-cell-${l}`;
-				newDivElement.classList.add('enemy');
+
 				computerGameboardEl.appendChild(newDivElement);
 				l++;
-				colIndex++;
 			}
 		});
-		colIndex = 0;
-		rowIndex++;
 	});
 }
 
-const pb = renderGameboard(realPlayer);
-const eb = renderGameboard(enemyPlayer);
+// const pb = renderGameboard(realPlayer);
+// const eb = renderGameboard(enemyPlayer);
 
 navDisplay(realPlayer, enemyPlayer);
+
+// console.log(filtered);
+function cpuTurn() {
+	let rowI = Math.floor(Math.random() * 10);
+	let colI = Math.floor(Math.random() * 10);
+	let hmo = realPlayer.board.receiveAttack(rowI, colI);
+	renderGameboard(realPlayer);
+	renderGameboard(enemyPlayer);
+	let Cells = document.querySelectorAll('.unit-cell');
+	let player = document.querySelectorAll('.player');
+
+	let filtered = Array.from(Cells).filter((cell) => {
+		if (
+			cell.dataset.col == 3 &&
+			cell.dataset.row == 1 &&
+			cell.classList.contains('player')
+		) {
+			return cell;
+		}
+	});
+
+	attackCoordinate(filtered[0], hmo);
+}
+
+cpuTurn();

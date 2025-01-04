@@ -20,5 +20,4 @@ enemyPlayer.board.setShip(6, 6, 'destroyer');
 enemyPlayer.board.setShip(9, 9, 'submarine');
 enemyPlayer.board.setShip(2, 3, 'battleship', false);
 
-console.log(realPlayer.board.receiveAttack(0, 0));
 export { realPlayer, enemyPlayer };

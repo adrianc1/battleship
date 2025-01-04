@@ -3,7 +3,8 @@
 	"scripts": {
 		"test": "jest",
 		"build": "webpack --config webpack.config.js",
-		"start": "webpack serve --open"
+		"start": "webpack serve --open",
+		"dependency-test": "npx madge --circular --extensions ts ./src"
 	},
 	"devDependencies": {
 		"@babel/core": "^7.26.0",
