@@ -1,10 +1,9 @@
 import { Player } from './gameboard.js';
+import { attackCoordinate } from './ui.js';
 
 // init players
 const realPlayer = new Player('player');
 const enemyPlayer = new Player();
-const playerGameboardEl = document.getElementById('player-gameboard');
-const computerGameboardEl = document.getElementById('computer-gameboard');
 
 // manually set ships
 realPlayer.board.setShip(0, 0, 'aircraftCarrier');
@@ -20,5 +19,23 @@ enemyPlayer.board.setShip(6, 6, 'destroyer');
 enemyPlayer.board.setShip(9, 9, 'submarine');
 enemyPlayer.board.setShip(2, 3, 'battleship', false);
 
-console.log(realPlayer.board.receiveAttack(0, 0));
-export { realPlayer, enemyPlayer };
+function playerTurn(boo) {
+	let currentPlayerTurn = boo;
+
+	if (currentPlayerTurn) {
+		// player makes selection
+		currentPlayerTurn = false;
+	} else {
+		// computer makes selection
+		cpuTurn();
+		currentPlayerTurn = true;
+		return;
+	}
+}
+
+function cpuTurn() {
+	let row = Math.floor(Math.random() * 10);
+	let col = Math.floor(Math.random() * 10);
+}
+
+export { realPlayer, enemyPlayer, playerTurn };
