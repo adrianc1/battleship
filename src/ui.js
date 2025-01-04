@@ -1,4 +1,5 @@
 import { realPlayer, enemyPlayer } from './interactions.js';
+import { playerTurn } from './gameLogic.js';
 
 const playerContainer = document.getElementById('player-main');
 const playerGameboardEl = document.getElementById('player-gameboard');
@@ -70,6 +71,7 @@ function renderGameboard(currBoard) {
 			newDivElement.addEventListener('click', () => {
 				const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
 				attackCoordinate(newDivElement, hitOrMiss);
+				playerTurn(false);
 			});
 			colorShips(newDivElement);
 
@@ -90,25 +92,24 @@ function renderGameboard(currBoard) {
 	});
 }
 
-// const pb = renderGameboard(realPlayer);
-// const eb = renderGameboard(enemyPlayer);
-
+renderGameboard(realPlayer);
+renderGameboard(enemyPlayer);
 navDisplay(realPlayer, enemyPlayer);
 
 // console.log(filtered);
-function cpuTurn() {
+
+export function cpuTurn() {
 	let rowI = Math.floor(Math.random() * 10);
 	let colI = Math.floor(Math.random() * 10);
 	let hmo = realPlayer.board.receiveAttack(rowI, colI);
-	renderGameboard(realPlayer);
-	renderGameboard(enemyPlayer);
+
 	let Cells = document.querySelectorAll('.unit-cell');
 	let player = document.querySelectorAll('.player');
 
 	let filtered = Array.from(Cells).filter((cell) => {
 		if (
-			cell.dataset.col == 3 &&
-			cell.dataset.row == 1 &&
+			cell.dataset.col == colI &&
+			cell.dataset.row == rowI &&
 			cell.classList.contains('player')
 		) {
 			return cell;
@@ -117,5 +118,3 @@ function cpuTurn() {
 
 	attackCoordinate(filtered[0], hmo);
 }
-
-cpuTurn();

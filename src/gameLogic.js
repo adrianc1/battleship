@@ -1,6 +1,5 @@
 import { Player } from './gameboard.js';
-import { attackCoordinate } from './ui.js';
-
+import { cpuTurn } from './ui.js';
 // init players
 const realPlayer = new Player('player');
 const enemyPlayer = new Player();
@@ -29,15 +28,7 @@ function playerTurn(boo) {
 		// computer makes selection
 		cpuTurn();
 		currentPlayerTurn = true;
-		return;
 	}
-}
-
-function cpuTurn() {
-	let row = Math.floor(Math.random() * 10);
-	let col = Math.floor(Math.random() * 10);
-	realPlayer.board.receiveAttack(row, col);
-	attackCoordinate();
 }
 
 export { realPlayer, enemyPlayer, playerTurn };

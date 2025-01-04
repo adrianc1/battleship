@@ -98,6 +98,8 @@ export class Gameboard {
 	receiveAttack(x, y) {
 		if (arguments.length === 0) return 'Please Enter Coordinates';
 
+		console.log(this.board[x][y]);
+		if (this.board[x][y] == 'x' || this.board[x][y] == 'x!') return;
 		if (this.board[x][y] != null || this.board[x][y] != undefined) {
 			this.isHit(x, y);
 			return 'Hit!';
