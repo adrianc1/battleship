@@ -38,7 +38,7 @@ export function navDisplay(player, evil) {
 	enemyShipsRemaining.textContent += enemyPlayer.board.shipsRemaining();
 }
 
-export function attackCoordinate(element, hom) {
+export function updateCellUI(element, hom) {
 	let isSelected = element.classList.contains('active');
 	let isEnemy = element.classList.contains('enemy');
 	if (isSelected) {
@@ -70,7 +70,7 @@ function renderGameboard(currBoard) {
 			newDivElement.textContent = col;
 			newDivElement.addEventListener('click', () => {
 				const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
-				attackCoordinate(newDivElement, hitOrMiss);
+				updateCellUI(newDivElement, hitOrMiss);
 				playerTurn(false);
 			});
 			colorShips(newDivElement);
@@ -97,24 +97,3 @@ renderGameboard(enemyPlayer);
 navDisplay(realPlayer, enemyPlayer);
 
 // console.log(filtered);
-
-export function cpuTurn() {
-	let rowI = Math.floor(Math.random() * 10);
-	let colI = Math.floor(Math.random() * 10);
-	let hmo = realPlayer.board.receiveAttack(rowI, colI);
-
-	let Cells = document.querySelectorAll('.unit-cell');
-	let player = document.querySelectorAll('.player');
-
-	let filtered = Array.from(Cells).filter((cell) => {
-		if (
-			cell.dataset.col == colI &&
-			cell.dataset.row == rowI &&
-			cell.classList.contains('player')
-		) {
-			return cell;
-		}
-	});
-
-	attackCoordinate(filtered[0], hmo);
-}

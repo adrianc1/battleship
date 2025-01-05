@@ -1,5 +1,5 @@
 import { Player } from './gameboard.js';
-import { cpuTurn } from './ui.js';
+import { updateCellUI } from './ui.js';
 // init players
 const realPlayer = new Player('player');
 const enemyPlayer = new Player();
@@ -29,6 +29,27 @@ function playerTurn(boo) {
 		cpuTurn();
 		currentPlayerTurn = true;
 	}
+}
+
+export function cpuTurn() {
+	let rowI = Math.floor(Math.random() * 10);
+	let colI = Math.floor(Math.random() * 10);
+	let hmo = realPlayer.board.receiveAttack(rowI, colI);
+
+	let Cells = document.querySelectorAll('.unit-cell');
+	let player = document.querySelectorAll('.player');
+
+	let filtered = Array.from(Cells).filter((cell) => {
+		if (
+			cell.dataset.col == colI &&
+			cell.dataset.row == rowI &&
+			cell.classList.contains('player')
+		) {
+			return cell;
+		}
+	});
+
+	updateCellUI(filtered[0], hmo);
 }
 
 export { realPlayer, enemyPlayer, playerTurn };
