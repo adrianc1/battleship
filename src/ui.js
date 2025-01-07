@@ -1,6 +1,4 @@
-import { realPlayer, enemyPlayer } from './interactions.js';
-import { playerTurn } from './gameLogic.js';
-
+// navDisplay(realPlayer, enemyPlayer);
 const playerContainer = document.getElementById('player-main');
 const playerGameboardEl = document.getElementById('player-gameboard');
 const computerContainer = document.getElementById('computer-main');
@@ -11,7 +9,6 @@ const generalBoardEl = document.querySelectorAll('.gb');
 
 // display nav and scoring
 export function navDisplay(player, evil) {
-	const navBar = document.getElementById('nav-bar');
 	const playerHits = document.getElementById('player-hits');
 	const enemyHits = document.getElementById('enemy-hits');
 	const playerMisses = document.getElementById('player-misses');
@@ -40,7 +37,6 @@ export function navDisplay(player, evil) {
 
 export function updateCellUI(element, hom) {
 	let isSelected = element.classList.contains('active');
-	let isEnemy = element.classList.contains('enemy');
 	if (isSelected) {
 		return;
 	} else if (hom == 'Hit!') {
@@ -58,7 +54,7 @@ function colorShips(cell) {
 	}
 }
 
-function renderGameboard(currBoard) {
+export function renderGameboard(currBoard) {
 	let l = 1;
 
 	currBoard.board.board.forEach((row, rowIndex) => {
@@ -71,7 +67,6 @@ function renderGameboard(currBoard) {
 			newDivElement.addEventListener('click', () => {
 				const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
 				updateCellUI(newDivElement, hitOrMiss);
-				playerTurn(false);
 			});
 			colorShips(newDivElement);
 
@@ -84,16 +79,10 @@ function renderGameboard(currBoard) {
 				return;
 			} else {
 				newDivElement.id = `enemy-cell-${l}`;
-
 				computerGameboardEl.appendChild(newDivElement);
 				l++;
 			}
 		});
 	});
+	// navDisplay(currBoard);
 }
-
-renderGameboard(realPlayer);
-renderGameboard(enemyPlayer);
-navDisplay(realPlayer, enemyPlayer);
-
-// console.log(filtered);
