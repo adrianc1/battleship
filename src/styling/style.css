@@ -76,9 +76,21 @@ body {
 }
 
 .active {
+	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: red;
+	font-size: 1.5rem;
+	font-weight: bold;
 }
 
 .ship-color {
 	background-color: rgb(194, 232, 244);
+}
+
+.board-canvas {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
 }

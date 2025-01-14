@@ -5,8 +5,6 @@ const computerContainer = document.getElementById('computer-main');
 const computerGameboardEl = document.getElementById('computer-gameboard');
 const generalBoardEl = document.querySelectorAll('.gb');
 
-// add each players board to the screen
-
 // display nav and scoring
 export function navDisplay(player, evil) {
 	const playerHits = document.getElementById('player-hits');
@@ -25,14 +23,14 @@ export function navDisplay(player, evil) {
 	playerShipsRemaining.textContent = 'Player Ships Remaining: ';
 	enemyShipsRemaining.textContent = 'Enemy Ships Remaining: ';
 
-	playerHits.textContent += realPlayer.board.totalHits;
-	enemyHits.textContent += enemyPlayer.board.totalHits;
+	playerHits.textContent += player.board.totalHits;
+	enemyHits.textContent += evil.board.totalHits;
 
-	playerMisses.textContent += realPlayer.board.misses;
-	enemyMisses.textContent += enemyPlayer.board.misses;
+	playerMisses.textContent += player.board.misses;
+	enemyMisses.textContent += evil.board.misses;
 
-	playerShipsRemaining.textContent += realPlayer.board.shipsRemaining();
-	enemyShipsRemaining.textContent += enemyPlayer.board.shipsRemaining();
+	playerShipsRemaining.textContent += player.board.shipsRemaining();
+	enemyShipsRemaining.textContent += evil.board.shipsRemaining();
 }
 
 export function updateCellUI(element, hom) {
@@ -63,26 +61,26 @@ export function renderGameboard(currBoard) {
 			newDivElement.classList.add('unit-cell');
 			newDivElement.dataset.row = rowIndex;
 			newDivElement.dataset.col = colIndex;
-			newDivElement.textContent = col;
-			newDivElement.addEventListener('click', () => {
-				const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
-				updateCellUI(newDivElement, hitOrMiss);
-			});
-			colorShips(newDivElement);
 
 			// render player board
 			if (currBoard.board.name == 'player') {
+				playerGameboardEl.appendChild(newDivElement);
+				newDivElement.textContent = col;
 				newDivElement.classList.add('player');
 				newDivElement.id = `player-cell-${l}`;
-				playerGameboardEl.appendChild(newDivElement);
 				l++;
+				colorShips(newDivElement);
 				return;
 			} else {
+				newDivElement.addEventListener('click', () => {
+					const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
+					updateCellUI(newDivElement, hitOrMiss);
+				});
 				newDivElement.id = `enemy-cell-${l}`;
+				newDivElement.classList.add('enemy');
 				computerGameboardEl.appendChild(newDivElement);
 				l++;
 			}
 		});
 	});
-	// navDisplay(currBoard);
 }

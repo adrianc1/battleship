@@ -1,5 +1,5 @@
 import { Player } from './gameboard.js';
-import { updateCellUI, renderGameboard } from './ui.js';
+import { updateCellUI, renderGameboard, navDisplay } from './ui.js';
 
 function playerTurn(turn) {
 	let currentPlayerTurn = turn;
@@ -31,11 +31,16 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 			cell.dataset.row == rowI &&
 			cell.classList.contains('player')
 		) {
+			if (cell.classList.contains('active')) {
+				console.log('had to choose again!');
+				cpuTurn(realPlayer, enemyPlayer);
+			}
 			return cell;
 		}
 	});
 
 	updateCellUI(filtered[0], hmo);
+	navDisplay(realPlayer, enemyPlayer);
 	checkGameStatus(realPlayer, enemyPlayer);
 }
 
@@ -43,7 +48,7 @@ function game() {
 	// init players
 	const realPlayer = new Player('player');
 	const enemyPlayer = new Player();
-	let Cells = document.querySelectorAll('.gb');
+	let enemyBoard = document.getElementById('computer-gameboard');
 	let isGameOver = false;
 
 	// manually set ships
@@ -54,25 +59,24 @@ function game() {
 	realPlayer.board.setShip(2, 3, 'battleship', false);
 
 	// manually set computer ships on gameboard
-	enemyPlayer.board.setShip(0, 0, 'aircraftCarrier', false);
-	enemyPlayer.board.setShip(2, 2, 'cruiser', false);
-	enemyPlayer.board.setShip(6, 6, 'destroyer');
-	enemyPlayer.board.setShip(9, 9, 'submarine');
-	enemyPlayer.board.setShip(2, 3, 'battleship', false);
-	console.log('shit');
+	enemyPlayer.board.setShip(1, 0, 'aircraftCarrier', false);
+	enemyPlayer.board.setShip(6, 2, 'cruiser', false);
+	enemyPlayer.board.setShip(7, 7, 'destroyer');
+	enemyPlayer.board.setShip(1, 9, 'submarine');
+	enemyPlayer.board.setShip(2, 5, 'battleship', false);
 	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
 
-	Cells.forEach((cell) => {
-		cell.addEventListener('click', () => {
-			if (enemyPlayer.board.shipsRemaining() == 'All ships sunk!') {
-				alert('game over!');
-			}
+	enemyBoard.addEventListener('click', (e) => {
+		e.target.classList.add('active2');
+		if (enemyPlayer.board.shipsRemaining() == 'All ships sunk!') {
+			alert('game over!, YOU WIN!!');
+		}
+		setTimeout(() => {
 			cpuTurn(realPlayer, enemyPlayer);
-		});
+		}, 500);
+		navDisplay(realPlayer, enemyPlayer);
 	});
-
-	console.log(realPlayer.board.shipsRemaining());
 }
 
 function checkGameStatus(pb, eb) {
@@ -86,4 +90,5 @@ function checkGameStatus(pb, eb) {
 }
 
 game();
+
 export { playerTurn };
