@@ -17,9 +17,9 @@ export function navDisplay(player, evil) {
 	const enemyShipsRemaining = document.getElementById('enemy-ships-remaining');
 
 	playerHits.textContent = 'Player Received Hits: ';
-	enemyHits.textContent = 'Enemy Hits: ';
-	playerMisses.textContent = 'Player Misses: ';
-	enemyMisses.textContent = 'Enemy Misses: ';
+	enemyHits.textContent = 'Hits: ';
+	playerMisses.textContent = 'Misses: ';
+	enemyMisses.textContent = 'Misses: ';
 	playerShipsRemaining.textContent = 'Player Ships Remaining: ';
 	enemyShipsRemaining.textContent = 'Enemy Ships Remaining: ';
 
@@ -41,7 +41,7 @@ export function updateCellUI(element, hom) {
 		element.classList.add('active');
 		element.textContent = hom;
 		element.classList.remove('ship-color');
-	} else {
+	} else if (hom == 'Miss!') {
 		element.classList.add('active');
 	}
 }
@@ -72,10 +72,6 @@ export function renderGameboard(currBoard) {
 				colorShips(newDivElement);
 				return;
 			} else {
-				newDivElement.addEventListener('click', () => {
-					const hitOrMiss = currBoard.board.receiveAttack(rowIndex, colIndex);
-					updateCellUI(newDivElement, hitOrMiss);
-				});
 				newDivElement.id = `enemy-cell-${l}`;
 				newDivElement.classList.add('enemy');
 				computerGameboardEl.appendChild(newDivElement);
