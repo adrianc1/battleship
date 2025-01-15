@@ -39,6 +39,8 @@ export class Gameboard {
 			let shipValues = this.ships[ship];
 			let lastColSquare = col + shipValues.len - 1;
 			let lastRowSquare = row + shipValues.len - 1;
+			let ranRow = Math.floor(Math.random() * 10);
+			let ranCol = Math.floor(Math.random() * 10);
 
 			// check if the boat will be off the board
 			if (
@@ -47,9 +49,12 @@ export class Gameboard {
 				lastRowSquare > 9 ||
 				lastRowSquare < 0
 			) {
-				throw new Error();
+				return this.setShip(ranRow, ranCol, ship);
 			}
 
+			if (this.validPlacement(row, col, shipValues) == false) {
+				return this.setShip(ranRow, ranCol, ship);
+			}
 			this.board[row][col] = ship;
 			count++;
 
@@ -60,9 +65,13 @@ export class Gameboard {
 					if (isHorizontal) {
 						let nextCol = col + 1;
 						if (nextCol > 9 || nextCol < 0) {
-							throw new Error();
+							throw new Error('FUCKCKKKK');
 						}
 
+						if (this.board[row][nextCol] != null) {
+							console.log('hey wait a minute, ', nextCol, 'is occupied', ship);
+							return this.setShip(ranRow, ranCol, ship);
+						}
 						this.board[row][nextCol] = ship;
 						col = nextCol;
 						count++;
@@ -71,12 +80,17 @@ export class Gameboard {
 						if (nextRow > 9 || nextRow < 0) {
 							throw new Error();
 						}
+						if (this.board[nextRow][col] != null) {
+							console.log('hey wait a minute, ', nextRow, 'is occupied', ship);
+							return this.setShip(ranRow, ranCol, ship);
+						}
 						count++;
 						this.board[nextRow][col] = ship;
 						row = nextRow;
 					}
 				}
 			}
+			console.log(this.board['submarine']);
 			return ship;
 		}
 		return 'Not a valid ship';
@@ -127,9 +141,18 @@ export class Gameboard {
 
 		return startingShips - sunkedShips;
 	}
+
+	validPlacement(row, col, v) {
+		if (this.board[row][col] == null) {
+			return true;
+		}
+		return false;
+	}
 }
 export class Player {
 	constructor(name) {
 		this.board = new Gameboard(name);
 	}
 }
+
+export function randomPlacement() {}

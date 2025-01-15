@@ -1,4 +1,3 @@
-// navDisplay(realPlayer, enemyPlayer);
 const playerContainer = document.getElementById('player-main');
 const playerGameboardEl = document.getElementById('player-gameboard');
 const computerContainer = document.getElementById('computer-main');
@@ -43,6 +42,7 @@ export function updateCellUI(element, hom) {
 		element.classList.remove('ship-color');
 	} else if (hom == 'Miss!') {
 		element.classList.add('active');
+		element.classList.add('miss');
 	}
 }
 
