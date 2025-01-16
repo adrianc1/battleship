@@ -47,26 +47,26 @@ export function game() {
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'aircraftCarrier',
+		'Carrier',
 		randomOrientation()
 	);
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'cruiser',
+		'Cruiser',
 		randomOrientation()
 	);
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'destroyer',
+		'Destroyer',
 		randomOrientation()
 	);
-	realPlayer.board.setShip(randomNumber(), randomNumber(), 'submarine');
+	realPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'battleship',
+		'Battleship',
 		randomOrientation()
 	);
 
@@ -74,33 +74,31 @@ export function game() {
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'aircraftCarrier',
+		'Carrier',
 		randomOrientation()
 	);
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'cruiser',
+		'Cruiser',
 		randomOrientation()
 	);
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'destroyer',
+		'Destroyer',
 		randomOrientation()
 	);
-	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'submarine');
+	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
-		'battleship',
+		'Battleship',
 		randomOrientation()
 	);
 	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
 	navDisplay(realPlayer, enemyPlayer);
-
-	// console.log(realPlayer.board.board);
 
 	enemyBoard.addEventListener('click', (e) => {
 		// check if cell is already selected
@@ -112,6 +110,7 @@ export function game() {
 		let c = Number(e.target.dataset.col);
 		const attackStatus = enemyPlayer.board.receiveAttack(r, c);
 		updateCellUI(e.target, attackStatus);
+		console.log(e.target);
 
 		// if a ship is hit, players turn again
 		if (attackStatus == 'Hit!') {
@@ -131,7 +130,7 @@ export function game() {
 		// computer's turn
 		setTimeout(() => {
 			cpuTurn(realPlayer, enemyPlayer);
-		}, 800);
+		}, 500);
 
 		// display score and game information
 		navDisplay(realPlayer, enemyPlayer);

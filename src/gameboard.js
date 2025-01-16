@@ -20,11 +20,11 @@ export class Gameboard {
 		this.name = name;
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
 		this.ships = {
-			aircraftCarrier: new Ship(5, 0),
-			battleship: new Ship(4, 0),
-			cruiser: new Ship(3, 0),
-			destroyer: new Ship(2, 0),
-			submarine: new Ship(1, 0),
+			Carrier: new Ship(5, 0),
+			Battleship: new Ship(4, 0),
+			Cruiser: new Ship(3, 0),
+			Destroyer: new Ship(2, 0),
+			Submarine: new Ship(2, 0),
 		};
 		this.misses = 0;
 		this.totalHits = 0;
@@ -43,10 +43,9 @@ export class Gameboard {
 				return this.setShip(ranRow, ranCol, ship);
 			}
 
-			this.board[row][col] = ship;
-
 			// iterate over grid
 			for (let i = 1; i < shipValues.len; i++) {
+				this.board[row][col] = ship;
 				// check if ship can be placed horizontal
 				if (isHorizontal) {
 					let nextCol = col + 1;
@@ -70,10 +69,16 @@ export class Gameboard {
 
 	isHit(x, y) {
 		const shipString = this.board[x][y];
-		this.board[x][y] = 'x!';
+		const pb = document.getElementById('attack-status-pb');
+		const eb = document.getElementById('attack-status-eb');
+		this.board[x][y] = shipString;
 		this.ships[shipString].hit();
-
 		this.totalHits += 1;
+
+		if (this.ships[shipString].isSunk()) {
+			return (eb.textContent = `${shipString} has been sunk!!`);
+		}
+		eb.textContent = `${shipString} has been hit!`;
 		return;
 	}
 
@@ -117,15 +122,11 @@ export class Gameboard {
 		for (let i = 0; i < shipValues.len; i++) {
 			// check if ship can be placed horizontal
 			if (isHorizontal) {
-				console.log(`row: ${row} col: ${col + i}`);
 				if (col + i > 9 || this.board[row][col + i] != null) {
-					console.log(`Cell ${row}, ${col + i} is occupied `, isHorizontal);
 					return false;
 				}
 			} else {
-				console.log(`row: ${row + i} col: ${col}`);
 				if (row + i > 9 || this.board[row + i][col] != null) {
-					console.log(`Cell ${row}, ${col + i} is occupid `, isHorizontal);
 					return false;
 				}
 			}

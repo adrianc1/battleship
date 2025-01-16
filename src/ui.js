@@ -47,7 +47,7 @@ export function updateCellUI(element, hom) {
 }
 
 function colorShips(cell) {
-	if (cell.textContent) {
+	if (cell.classList.contains('ship')) {
 		cell.classList.add('ship-color');
 	}
 }
@@ -65,11 +65,16 @@ export function renderGameboard(currBoard) {
 			// render player board
 			if (currBoard.board.name == 'player') {
 				playerGameboardEl.appendChild(newDivElement);
-				newDivElement.textContent = col;
+				// newDivElement.textContent = col;
 				newDivElement.classList.add('player');
 				newDivElement.id = `player-cell-${l}`;
 				l++;
-				colorShips(newDivElement);
+				if (col) {
+					newDivElement.classList.add('ship');
+
+					colorShips(newDivElement);
+				}
+
 				return;
 			} else {
 				newDivElement.id = `enemy-cell-${l}`;
