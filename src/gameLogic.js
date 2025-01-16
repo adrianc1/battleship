@@ -44,21 +44,63 @@ export function game() {
 	let enemyBoard = document.getElementById('computer-gameboard');
 
 	// manually set ships
-	realPlayer.board.setShip(9, 9, 'aircraftCarrier');
-	realPlayer.board.setShip(2, 2, 'cruiser', false);
-	realPlayer.board.setShip(5, 5, 'destroyer');
-	realPlayer.board.setShip(1, 8, 'submarine');
-	realPlayer.board.setShip(6, 2, 'battleship', false);
+	realPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'aircraftCarrier',
+		randomOrientation()
+	);
+	realPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'cruiser',
+		randomOrientation()
+	);
+	realPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'destroyer',
+		randomOrientation()
+	);
+	realPlayer.board.setShip(randomNumber(), randomNumber(), 'submarine');
+	realPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'battleship',
+		randomOrientation()
+	);
 
 	// manually set computer ships on gameboard
-	enemyPlayer.board.setShip(0, 0, 'aircraftCarrier', false);
-	enemyPlayer.board.setShip(6, 2, 'cruiser', false);
-	enemyPlayer.board.setShip(7, 7, 'destroyer');
-	enemyPlayer.board.setShip(1, 9, 'submarine');
-	enemyPlayer.board.setShip(2, 5, 'battleship', false);
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'aircraftCarrier',
+		randomOrientation()
+	);
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'cruiser',
+		randomOrientation()
+	);
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'destroyer',
+		randomOrientation()
+	);
+	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'submarine');
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'battleship',
+		randomOrientation()
+	);
 	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
 	navDisplay(realPlayer, enemyPlayer);
+
+	// console.log(realPlayer.board.board);
 
 	enemyBoard.addEventListener('click', (e) => {
 		// check if cell is already selected
@@ -79,7 +121,7 @@ export function game() {
 			if (check == 'All ships sunk!') {
 				// check if all ships have bee sunk
 				setTimeout(() => {
-					alert('game over!, YOU WIN!!');
+					alert('game over!!, YOU WIN!!');
 				}, 0);
 				return;
 			}
@@ -99,3 +141,9 @@ export function game() {
 function randomNumber() {
 	return Math.floor(Math.random() * 10);
 }
+
+function randomOrientation() {
+	return Math.random() < 0.5;
+}
+
+game();

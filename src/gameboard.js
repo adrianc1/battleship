@@ -32,65 +32,33 @@ export class Gameboard {
 	}
 
 	// set ship on board
-	setShip(row, col, ship, isHorizontal = true) {
+	setShip(row, col, ship, isHorizontal) {
 		// check if ship is valid
 		if (this.ships.hasOwnProperty(ship)) {
-			let count = 0;
 			let shipValues = this.ships[ship];
-			let lastColSquare = col + shipValues.len - 1;
-			let lastRowSquare = row + shipValues.len - 1;
 			let ranRow = Math.floor(Math.random() * 10);
 			let ranCol = Math.floor(Math.random() * 10);
 
-			// check if the boat will be off the board
-			if (
-				lastColSquare > 9 ||
-				lastColSquare < 0 ||
-				lastRowSquare > 9 ||
-				lastRowSquare < 0
-			) {
+			if (this.validPlacement(row, col, shipValues, isHorizontal) == false) {
 				return this.setShip(ranRow, ranCol, ship);
 			}
 
-			if (this.validPlacement(row, col, shipValues) == false) {
-				return this.setShip(ranRow, ranCol, ship);
-			}
 			this.board[row][col] = ship;
-			count++;
 
 			// iterate over grid
-			while (count < shipValues.len) {
-				for (let i = 1; i < shipValues.len; i++) {
-					// check if ship can be placed horizontal
-					if (isHorizontal) {
-						let nextCol = col + 1;
-						if (nextCol > 9 || nextCol < 0) {
-							throw new Error('FUCKCKKKK');
-						}
-
-						if (this.board[row][nextCol] != null) {
-							console.log('hey wait a minute, ', nextCol, 'is occupied', ship);
-							return this.setShip(ranRow, ranCol, ship);
-						}
-						this.board[row][nextCol] = ship;
-						col = nextCol;
-						count++;
-					} else {
-						let nextRow = row + 1;
-						if (nextRow > 9 || nextRow < 0) {
-							throw new Error();
-						}
-						if (this.board[nextRow][col] != null) {
-							console.log('hey wait a minute, ', nextRow, 'is occupied', ship);
-							return this.setShip(ranRow, ranCol, ship);
-						}
-						count++;
-						this.board[nextRow][col] = ship;
-						row = nextRow;
-					}
+			for (let i = 1; i < shipValues.len; i++) {
+				// check if ship can be placed horizontal
+				if (isHorizontal) {
+					let nextCol = col + 1;
+					this.board[row][nextCol] = ship;
+					col = nextCol;
+				} else {
+					let nextRow = row + 1;
+					this.board[nextRow][col] = ship;
+					row = nextRow;
 				}
 			}
-			console.log(this.board['submarine']);
+
 			return ship;
 		}
 		return 'Not a valid ship';
@@ -117,6 +85,7 @@ export class Gameboard {
 		}
 
 		if (this.board[x][y] == 'x' || this.board[x][y] == 'x!') return;
+
 		if (this.board[x][y] != null || this.board[x][y] != undefined) {
 			this.isHit(x, y);
 			return 'Hit!';
@@ -142,11 +111,26 @@ export class Gameboard {
 		return startingShips - sunkedShips;
 	}
 
-	validPlacement(row, col, v) {
-		if (this.board[row][col] == null) {
-			return true;
+	validPlacement(row, col, v, isHorizontal) {
+		let shipValues = v;
+
+		for (let i = 0; i < shipValues.len; i++) {
+			// check if ship can be placed horizontal
+			if (isHorizontal) {
+				console.log(`row: ${row} col: ${col + i}`);
+				if (col + i > 9 || this.board[row][col + i] != null) {
+					console.log(`Cell ${row}, ${col + i} is occupied `, isHorizontal);
+					return false;
+				}
+			} else {
+				console.log(`row: ${row + i} col: ${col}`);
+				if (row + i > 9 || this.board[row + i][col] != null) {
+					console.log(`Cell ${row}, ${col + i} is occupid `, isHorizontal);
+					return false;
+				}
+			}
 		}
-		return false;
+		return true;
 	}
 }
 export class Player {
