@@ -1,17 +1,16 @@
 import { Player } from './gameboard.js';
-import { updateCellUI, renderGameboard, navDisplay } from './ui.js';
+import { updateCellUI, renderGameboard, updateNavDisplay } from './ui.js';
 
 export function cpuTurn(realPlayer, enemyPlayer) {
-	let rowI = Math.floor(Math.random() * 10);
-	let colI = Math.floor(Math.random() * 10);
-	let hmo = realPlayer.board.receiveAttack(rowI, colI);
-
+	let row = Math.floor(Math.random() * 10);
+	let col = Math.floor(Math.random() * 10);
+	let attackStatus = realPlayer.board.receiveAttack(row, col);
 	let Cells = document.querySelectorAll('.unit-cell');
 
 	let filtered = Array.from(Cells).filter((cell) => {
 		if (
-			cell.dataset.col == colI &&
-			cell.dataset.row == rowI &&
+			cell.dataset.col == col &&
+			cell.dataset.row == row &&
 			cell.classList.contains('player')
 		) {
 			if (cell.classList.contains('active')) {
@@ -21,29 +20,69 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 		}
 	});
 
-	updateCellUI(filtered[0], hmo);
+	updateCellUI(filtered[0], attackStatus);
+	updateNavDisplay(realPlayer, enemyPlayer);
 
-	if (hmo == 'Hit!') {
-		if (realPlayer.board.shipsRemaining() == 'All ships sunk!') {
-			setTimeout(() => {
-				alert('game over! ENEMY WINS!');
-			}, 0);
-			return;
-		}
-		setTimeout(() => {
-			cpuTurn(realPlayer, enemyPlayer);
-		}, 500);
+	if (repeatSuccessfulAttack(attackStatus, realPlayer)) {
+		cpuTurn(realPlayer, enemyPlayer);
 	}
-	navDisplay(realPlayer, enemyPlayer);
 }
 
 export function game() {
 	// init players
 	const realPlayer = new Player('player');
 	const enemyPlayer = new Player();
-	let enemyBoard = document.getElementById('computer-gameboard');
+	let enemyBoardEl = document.getElementById('computer-gameboard');
+	randomizeShipCoordinates(realPlayer, enemyPlayer);
+	renderGameboard(realPlayer);
+	renderGameboard(enemyPlayer);
+	updateNavDisplay(realPlayer, enemyPlayer);
 
-	// manually set ships
+	let debounceTimeout;
+	enemyBoardEl.addEventListener('click', (e) => {
+		if (e.target.classList.contains('active')) {
+			return;
+		}
+		clearTimeout(debounceTimeout);
+		debounceTimeout = setTimeout(() => {
+			let r = Number(e.target.dataset.row);
+			let c = Number(e.target.dataset.col);
+			const attackStatus = enemyPlayer.board.receiveAttack(r, c);
+			updateCellUI(e.target, attackStatus);
+			updateNavDisplay(realPlayer, enemyPlayer);
+
+			if (repeatSuccessfulAttack(attackStatus, enemyPlayer)) {
+				return;
+			}
+			cpuTurn(realPlayer, enemyPlayer);
+		}, 250);
+	});
+}
+
+function randomNumber() {
+	return Math.floor(Math.random() * 10);
+}
+
+function randomOrientation() {
+	return Math.random() < 0.5;
+}
+
+function repeatSuccessfulAttack(status, currBoard) {
+	if (status == 'Hit!') {
+		const check = currBoard.board.shipsRemaining();
+
+		if (check == 'All ships sunk!') {
+			if (currBoard.board.name == 'player') {
+				alert('GAME OVER, YOU LOSE!!!');
+				return;
+			}
+			alert('game over!!, YOU WIN!!');
+		}
+		return true;
+	}
+}
+
+function randomizeShipCoordinates(realPlayer, enemyPlayer) {
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
@@ -70,7 +109,7 @@ export function game() {
 		randomOrientation()
 	);
 
-	// manually set computer ships on gameboard
+	// randomly set computer ships on gameboard
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
@@ -96,53 +135,6 @@ export function game() {
 		'Battleship',
 		randomOrientation()
 	);
-	renderGameboard(realPlayer);
-	renderGameboard(enemyPlayer);
-	navDisplay(realPlayer, enemyPlayer);
-
-	enemyBoard.addEventListener('click', (e) => {
-		// check if cell is already selected
-		if (e.target.classList.contains('active')) {
-			return;
-		}
-		// get coordinates, attack cell, and update UI
-		let r = Number(e.target.dataset.row);
-		let c = Number(e.target.dataset.col);
-		const attackStatus = enemyPlayer.board.receiveAttack(r, c);
-		updateCellUI(e.target, attackStatus);
-		console.log(e.target);
-
-		// if a ship is hit, players turn again
-		if (attackStatus == 'Hit!') {
-			const check = enemyPlayer.board.shipsRemaining();
-			navDisplay(realPlayer, enemyPlayer);
-			updateCellUI(e.target, attackStatus);
-			if (check == 'All ships sunk!') {
-				// check if all ships have bee sunk
-				setTimeout(() => {
-					alert('game over!!, YOU WIN!!');
-				}, 0);
-				return;
-			}
-			return;
-		}
-
-		// computer's turn
-		setTimeout(() => {
-			cpuTurn(realPlayer, enemyPlayer);
-		}, 500);
-
-		// display score and game information
-		navDisplay(realPlayer, enemyPlayer);
-	});
-}
-
-function randomNumber() {
-	return Math.floor(Math.random() * 10);
-}
-
-function randomOrientation() {
-	return Math.random() < 0.5;
 }
 
 game();

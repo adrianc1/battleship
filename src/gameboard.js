@@ -40,13 +40,12 @@ export class Gameboard {
 			let ranCol = Math.floor(Math.random() * 10);
 
 			if (this.validPlacement(row, col, shipValues, isHorizontal) == false) {
-				return this.setShip(ranRow, ranCol, ship);
+				return this.setShip(ranRow, ranCol, ship, isHorizontal);
 			}
 
-			// iterate over grid
+			// iterate over grid to place ships
 			for (let i = 1; i < shipValues.len; i++) {
 				this.board[row][col] = ship;
-				// check if ship can be placed horizontal
 				if (isHorizontal) {
 					let nextCol = col + 1;
 					this.board[row][nextCol] = ship;
@@ -57,8 +56,6 @@ export class Gameboard {
 					row = nextRow;
 				}
 			}
-
-			return ship;
 		}
 		return 'Not a valid ship';
 	}
@@ -71,7 +68,7 @@ export class Gameboard {
 		const shipString = this.board[x][y];
 		const pb = document.getElementById('attack-status-pb');
 		const eb = document.getElementById('attack-status-eb');
-		this.board[x][y] = shipString;
+		this.board[x][y] = 'x!';
 		this.ships[shipString].hit();
 		this.totalHits += 1;
 
@@ -83,9 +80,15 @@ export class Gameboard {
 	}
 
 	receiveAttack(x, y) {
+		// ensure coordinates are passed
 		if (arguments.length === 0) return 'Please Enter Coordinates';
 
-		if (typeof x !== 'number' || typeof y !== 'number') {
+		// ensure a number is passed
+		if (
+			typeof x !== 'number' ||
+			typeof y !== 'number' ||
+			this.board == undefined
+		) {
 			return 'enter a number!';
 		}
 
