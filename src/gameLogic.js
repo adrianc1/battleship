@@ -76,7 +76,7 @@ function repeatSuccessfulAttack(status, currBoard) {
 				alert('GAME OVER, YOU LOSE!!!');
 				return;
 			}
-			alert('game over!!, YOU WIN!!');
+			alert('game over!!, YOU WIN!!!');
 		}
 		return true;
 	}
