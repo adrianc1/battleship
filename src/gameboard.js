@@ -36,10 +36,11 @@ export class Gameboard {
 		// check if ship is valid
 		if (this.ships.hasOwnProperty(ship)) {
 			let shipValues = this.ships[ship];
-			let ranRow = Math.floor(Math.random() * 10);
-			let ranCol = Math.floor(Math.random() * 10);
+			let ranRow = Math.floor(Math.random() * 9);
+			let ranCol = Math.floor(Math.random() * 9);
+			console.log(shipValues, 'this');
 
-			if (this.validPlacement(row, col, shipValues, isHorizontal) == false) {
+			if (this.validPlacement(row, col, ship, isHorizontal) == false) {
 				return this.setShip(ranRow, ranCol, ship, isHorizontal);
 			}
 
@@ -119,17 +120,53 @@ export class Gameboard {
 		return startingShips - sunkedShips;
 	}
 
-	validPlacement(row, col, v, isHorizontal) {
-		let shipValues = v;
+	validPlacement(row, col, ship, isHorizontal) {
+		let shipValues = this.ships[ship];
+		console.log(this, 'this222');
 
 		for (let i = 0; i < shipValues.len; i++) {
 			// check if ship can be placed horizontal
+			console.log(this.board.length, 'lennnn');
 			if (isHorizontal) {
 				if (col + i > 9 || this.board[row][col + i] != null) {
 					return false;
 				}
+				if (i == 0 || i == shipValues.len) {
+					if (
+						(row + 1 < this.board.length &&
+							this.board[row + 1][col] !== null) ||
+						(row - 1 >= 0 && this.board[row - 1][col] !== null)
+					) {
+						return false;
+					}
+				}
+
+				if (
+					(row + 1 < this.board.length && this.board[row + 1][col] !== null) ||
+					(row - 1 >= 0 && this.board[row - 1][col] !== null) ||
+					(col - 1 >= 0 && this.board[row][col - 1] !== null)
+				) {
+					return false;
+				}
 			} else {
 				if (row + i > 9 || this.board[row + i][col] != null) {
+					return false;
+				}
+				if (i == 0 || i == shipValues.len) {
+					if (
+						(col + 1 < this.board.length &&
+							this.board[row][col + 1] !== null) ||
+						(col - 1 >= 0 && this.board[row][col - 1] !== null) ||
+						(row - 1 >= 0 && this.board[row - 1][col] !== null)
+					) {
+						return false;
+					}
+				}
+
+				if (
+					(col + 1 < this.board.length && this.board[row][col + 1] !== null) ||
+					(col - 1 >= 0 && this.board[row][col - 1] !== null)
+				) {
 					return false;
 				}
 			}

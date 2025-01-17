@@ -23,13 +23,14 @@ body {
 
 #player-main,
 #computer-main {
-	height: 80%;
+	height: 100%;
 	width: 100%;
 }
 #player-board-container,
 #computer-gameboard-container {
 	display: flex;
 	justify-content: center;
+	flex-wrap: wrap;
 	height: 100%;
 	width: 100%;
 	border: 2px solid yellow;
@@ -38,9 +39,10 @@ body {
 .gb {
 	margin-top: 3rem;
 	display: grid;
-	border: 1px solid green;
-	height: 80%;
-	width: 80%;
+	aspect-ratio: 1;
+	border: 9px solid green;
+	width: 100%;
+	max-width: 550px;
 	grid-template-columns: repeat(10, 1fr);
 	grid-template-rows: repeat(10, 1fr);
 	background-color: rgb(232, 232, 232);

@@ -60,7 +60,7 @@ export function game() {
 }
 
 function randomNumber() {
-	return Math.floor(Math.random() * 10);
+	return Math.floor(Math.random() * 9);
 }
 
 function randomOrientation() {
@@ -102,6 +102,7 @@ function randomizeShipCoordinates(realPlayer, enemyPlayer) {
 		randomOrientation()
 	);
 	realPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
+
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
@@ -110,24 +111,24 @@ function randomizeShipCoordinates(realPlayer, enemyPlayer) {
 	);
 
 	// randomly set computer ships on gameboard
-	enemyPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Carrier',
-		randomOrientation()
-	);
-	enemyPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Cruiser',
-		randomOrientation()
-	);
-	enemyPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Destroyer',
-		randomOrientation()
-	);
+	// enemyPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Carrier',
+	// 	randomOrientation()
+	// );
+	// enemyPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Cruiser',
+	// 	randomOrientation()
+	// );
+	// enemyPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Destroyer',
+	// 	randomOrientation()
+	// );
 	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
 	enemyPlayer.board.setShip(
 		randomNumber(),
