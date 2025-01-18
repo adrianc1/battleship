@@ -35,49 +35,45 @@ export class Gameboard {
 	setShip(row, col, ship, isHorizontal) {
 		// check if ship is valid
 		if (this.ships.hasOwnProperty(ship)) {
-			let shipValues = this.ships[ship];
-			let ranRow = Math.floor(Math.random() * 9);
-			let ranCol = Math.floor(Math.random() * 9);
-			console.log(shipValues, 'this');
+			if (this.validPlacement(row, col, ship, isHorizontal)) {
+				this.placeShipAt(row, col, ship, isHorizontal);
+			} else {
+				let placed = false;
+				while (!placed) {
+					let ranRow = Math.floor(Math.random() * 9);
+					let ranCol = Math.floor(Math.random() * 9);
 
-			if (this.validPlacement(row, col, ship, isHorizontal) == false) {
-				return this.setShip(ranRow, ranCol, ship, isHorizontal);
-			}
-
-			// iterate over grid to place ships
-			for (let i = 1; i < shipValues.len; i++) {
-				this.board[row][col] = ship;
-				if (isHorizontal) {
-					let nextCol = col + 1;
-					this.board[row][nextCol] = ship;
-					col = nextCol;
-				} else {
-					let nextRow = row + 1;
-					this.board[nextRow][col] = ship;
-					row = nextRow;
+					if (this.validPlacement(ranRow, ranCol, ship, isHorizontal)) {
+						this.placeShipAt(ranRow, ranCol, ship, isHorizontal);
+						placed = true;
+					}
 				}
 			}
 		}
-		return 'Not a valid ship';
 	}
 
-	getBoard() {
-		return this.board;
+	placeShipAt(row, col, ship, isHorizontal) {
+		let shipValues = this.ships[ship];
+		for (let i = 1; i < shipValues.len; i++) {
+			this.board[row][col] = ship;
+			if (isHorizontal) {
+				let nextCol = col + 1;
+				this.board[row][nextCol] = ship;
+				col = nextCol;
+			} else {
+				let nextRow = row + 1;
+				this.board[nextRow][col] = ship;
+				row = nextRow;
+			}
+		}
 	}
 
 	isHit(x, y) {
 		const shipString = this.board[x][y];
-		const pb = document.getElementById('attack-status-pb');
-		const eb = document.getElementById('attack-status-eb');
 		this.board[x][y] = 'x!';
 		this.ships[shipString].hit();
 		this.totalHits += 1;
-
-		if (this.ships[shipString].isSunk()) {
-			return (eb.textContent = `${shipString} has been sunk!!`);
-		}
-		eb.textContent = `${shipString} has been hit!`;
-		return;
+		return true;
 	}
 
 	receiveAttack(x, y) {
@@ -93,15 +89,14 @@ export class Gameboard {
 			return 'enter a number!';
 		}
 
-		if (this.board[x][y] == 'x' || this.board[x][y] == 'x!') return;
+		if (this.board[x][y] == 'x' || this.board[x][y] == 'x!') return false;
 
 		if (this.board[x][y] != null || this.board[x][y] != undefined) {
-			this.isHit(x, y);
-			return 'Hit!';
+			return this.isHit(x, y);
 		}
 		this.board[x][y] = 'x';
 		this.misses += 1;
-		return 'Miss!';
+		return false;
 	}
 
 	shipsRemaining() {
@@ -122,55 +117,48 @@ export class Gameboard {
 
 	validPlacement(row, col, ship, isHorizontal) {
 		let shipValues = this.ships[ship];
-		console.log(this, 'this222');
 
 		for (let i = 0; i < shipValues.len; i++) {
-			// check if ship can be placed horizontal
-			console.log(this.board.length, 'lennnn');
-			if (isHorizontal) {
-				if (col + i > 9 || this.board[row][col + i] != null) {
-					return false;
-				}
-				if (i == 0 || i == shipValues.len) {
-					if (
-						(row + 1 < this.board.length &&
-							this.board[row + 1][col] !== null) ||
-						(row - 1 >= 0 && this.board[row - 1][col] !== null)
-					) {
-						return false;
-					}
-				}
+			let currentRow = isHorizontal ? row : row + i;
+			let currentCol = isHorizontal ? col + i : col;
 
-				if (
-					(row + 1 < this.board.length && this.board[row + 1][col] !== null) ||
-					(row - 1 >= 0 && this.board[row - 1][col] !== null) ||
-					(col - 1 >= 0 && this.board[row][col - 1] !== null)
-				) {
-					return false;
-				}
-			} else {
-				if (row + i > 9 || this.board[row + i][col] != null) {
-					return false;
-				}
-				if (i == 0 || i == shipValues.len) {
-					if (
-						(col + 1 < this.board.length &&
-							this.board[row][col + 1] !== null) ||
-						(col - 1 >= 0 && this.board[row][col - 1] !== null) ||
-						(row - 1 >= 0 && this.board[row - 1][col] !== null)
-					) {
-						return false;
-					}
-				}
+			// Check if the cell itself is occupied or out of bounds
+			if (
+				currentRow < 0 ||
+				currentRow > 9 ||
+				currentCol < 0 ||
+				currentCol > 9 ||
+				(this.board[currentRow] && this.board[currentRow][currentCol] != null)
+			) {
+				return false;
+			}
 
+			// Check the surrounding cells (bounding box around the ship segment)
+			const neighbors = [
+				[currentRow - 1, currentCol - 1],
+				[currentRow - 1, currentCol],
+				[currentRow - 1, currentCol + 1], // Above
+				[currentRow, currentCol - 1],
+				[currentRow, currentCol + 1], // Left/Right
+				[currentRow + 1, currentCol - 1],
+				[currentRow + 1, currentCol],
+				[currentRow + 1, currentCol + 1], // Below
+			];
+
+			for (const [nRow, nCol] of neighbors) {
 				if (
-					(col + 1 < this.board.length && this.board[row][col + 1] !== null) ||
-					(col - 1 >= 0 && this.board[row][col - 1] !== null)
+					nRow >= 0 &&
+					nRow <= 9 && // Ensure neighbor is within bounds
+					nCol >= 0 &&
+					nCol <= 9 &&
+					this.board[nRow] &&
+					this.board[nRow][nCol] != null
 				) {
 					return false;
 				}
 			}
 		}
+
 		return true;
 	}
 }
@@ -179,5 +167,3 @@ export class Player {
 		this.board = new Gameboard(name);
 	}
 }
-
-export function randomPlacement() {}

@@ -29,11 +29,11 @@ export function updateCellUI(element, hom) {
 	let isSelected = element.classList.contains('active');
 	if (isSelected) {
 		return;
-	} else if (hom == 'Hit!') {
+	} else if (hom) {
 		element.classList.add('active');
-		element.textContent = hom;
+		element.textContent = 'Hit!';
 		element.classList.remove('ship-color');
-	} else if (hom == 'Miss!') {
+	} else if (!hom) {
 		element.classList.add('active');
 		element.classList.add('miss');
 	}
@@ -66,4 +66,24 @@ export function renderGameboard(currBoard) {
 			}
 		});
 	});
+}
+
+export function displayAttackInformation(currBoard, status) {
+	const pb = document.getElementById('attack-status-pb');
+	const eb = document.getElementById('attack-status-eb');
+
+	if (currBoard.board.name == 'player') {
+		if (status) {
+			if (currBoard.)
+			pb.textContent = `Hit!`;
+		} else {
+			pb.textContent = 'Miss!';
+		}
+	} else {
+		if (status) {
+			eb.textContent = `Hit!`;
+		} else {
+			eb.textContent = 'Miss!';
+		}
+	}
 }

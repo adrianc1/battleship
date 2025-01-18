@@ -29,8 +29,7 @@ body {
 #player-board-container,
 #computer-gameboard-container {
 	display: flex;
-	justify-content: center;
-	flex-wrap: wrap;
+	/* flex-wrap: wrap; */
 	height: 100%;
 	width: 100%;
 	border: 2px solid yellow;

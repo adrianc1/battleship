@@ -1,5 +1,10 @@
 import { Player } from './gameboard.js';
-import { updateCellUI, renderGameboard, updateNavDisplay } from './ui.js';
+import {
+	updateCellUI,
+	renderGameboard,
+	updateNavDisplay,
+	displayAttackInformation,
+} from './ui.js';
 
 export function cpuTurn(realPlayer, enemyPlayer) {
 	let row = Math.floor(Math.random() * 10);
@@ -14,7 +19,9 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 			cell.classList.contains('player')
 		) {
 			if (cell.classList.contains('active')) {
-				cpuTurn(realPlayer, enemyPlayer);
+				setTimeout(() => {
+					cpuTurn(realPlayer, enemyPlayer);
+				}, 800);
 			}
 			return cell;
 		}
@@ -23,7 +30,7 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 	updateCellUI(filtered[0], attackStatus);
 	updateNavDisplay(realPlayer, enemyPlayer);
 
-	if (repeatSuccessfulAttack(attackStatus, realPlayer)) {
+	if (checkHit(attackStatus, realPlayer)) {
 		cpuTurn(realPlayer, enemyPlayer);
 	}
 }
@@ -38,24 +45,22 @@ export function game() {
 	renderGameboard(enemyPlayer);
 	updateNavDisplay(realPlayer, enemyPlayer);
 
-	let debounceTimeout;
 	enemyBoardEl.addEventListener('click', (e) => {
 		if (e.target.classList.contains('active')) {
 			return;
 		}
-		clearTimeout(debounceTimeout);
-		debounceTimeout = setTimeout(() => {
-			let r = Number(e.target.dataset.row);
-			let c = Number(e.target.dataset.col);
-			const attackStatus = enemyPlayer.board.receiveAttack(r, c);
-			updateCellUI(e.target, attackStatus);
-			updateNavDisplay(realPlayer, enemyPlayer);
+		let r = Number(e.target.dataset.row);
+		let c = Number(e.target.dataset.col);
+		const attackStatus = enemyPlayer.board.receiveAttack(r, c);
 
-			if (repeatSuccessfulAttack(attackStatus, enemyPlayer)) {
-				return;
-			}
-			cpuTurn(realPlayer, enemyPlayer);
-		}, 250);
+		updateCellUI(e.target, attackStatus);
+		updateNavDisplay(realPlayer, enemyPlayer);
+
+		if (checkHit(attackStatus, enemyPlayer)) {
+			return;
+		}
+
+		cpuTurn(realPlayer, enemyPlayer);
 	});
 }
 
@@ -67,10 +72,10 @@ function randomOrientation() {
 	return Math.random() < 0.5;
 }
 
-function repeatSuccessfulAttack(status, currBoard) {
-	if (status == 'Hit!') {
+function checkHit(status, currBoard) {
+	displayAttackInformation(currBoard, status);
+	if (status) {
 		const check = currBoard.board.shipsRemaining();
-
 		if (check == 'All ships sunk!') {
 			if (currBoard.board.name == 'player') {
 				alert('GAME OVER, YOU LOSE!!!');
@@ -83,12 +88,7 @@ function repeatSuccessfulAttack(status, currBoard) {
 }
 
 function randomizeShipCoordinates(realPlayer, enemyPlayer) {
-	realPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Carrier',
-		randomOrientation()
-	);
+	realPlayer.board.setShip(0, 0, 'Carrier', randomOrientation());
 	realPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
@@ -111,24 +111,24 @@ function randomizeShipCoordinates(realPlayer, enemyPlayer) {
 	);
 
 	// randomly set computer ships on gameboard
-	// enemyPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Carrier',
-	// 	randomOrientation()
-	// );
-	// enemyPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Cruiser',
-	// 	randomOrientation()
-	// );
-	// enemyPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Destroyer',
-	// 	randomOrientation()
-	// );
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'Carrier',
+		randomOrientation()
+	);
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'Cruiser',
+		randomOrientation()
+	);
+	enemyPlayer.board.setShip(
+		randomNumber(),
+		randomNumber(),
+		'Destroyer',
+		randomOrientation()
+	);
 	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
 	enemyPlayer.board.setShip(
 		randomNumber(),
