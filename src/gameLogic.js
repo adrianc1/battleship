@@ -4,9 +4,12 @@ import {
 	renderGameboard,
 	updateNavDisplay,
 	displayAttackInformation,
+	clearBoard,
 } from './ui.js';
 
 export function cpuTurn(realPlayer, enemyPlayer) {
+	clearBoard(realPlayer);
+	renderGameboard(realPlayer);
 	let row = Math.floor(Math.random() * 10);
 	let col = Math.floor(Math.random() * 10);
 	let attackStatus = realPlayer.board.receiveAttack(row, col);
@@ -16,7 +19,7 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 		if (
 			cell.dataset.col == col &&
 			cell.dataset.row == row &&
-			cell.classList.contains('player')
+			cell.classList.contains('player-cell')
 		) {
 			if (cell.classList.contains('active')) {
 				setTimeout(() => {
@@ -35,14 +38,12 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 	}
 }
 
-export function game(p1) {
-	// init players
-	const realPlayer = p1;
+export function game(realPlayer) {
 	const enemyPlayer = new Player();
 	let enemyBoardEl = document.getElementById('computer-gameboard');
 	randomizeShipCoordinates(enemyPlayer);
-	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
+
 	updateNavDisplay(realPlayer, enemyPlayer);
 
 	enemyBoardEl.addEventListener('click', (e) => {
@@ -87,7 +88,6 @@ function checkHit(status, currBoard) {
 		}
 		return true;
 	}
-	return { enemyPlayer, realPlayer };
 }
 
 function randomizeShipCoordinates(enemyPlayer, realPlayer) {

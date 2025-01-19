@@ -37,17 +37,10 @@ export class Gameboard {
 		if (this.ships.hasOwnProperty(ship)) {
 			if (this.validPlacement(row, col, ship, isHorizontal)) {
 				this.placeShipAt(row, col, ship, isHorizontal);
+				return true;
 			} else {
-				let placed = false;
-				while (!placed) {
-					let ranRow = Math.floor(Math.random() * 9);
-					let ranCol = Math.floor(Math.random() * 9);
-
-					if (this.validPlacement(ranRow, ranCol, ship, isHorizontal)) {
-						this.placeShipAt(ranRow, ranCol, ship, isHorizontal);
-						placed = true;
-					}
-				}
+				console.log('invalid spot!');
+				return false;
 			}
 		}
 	}

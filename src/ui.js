@@ -26,6 +26,7 @@ export function updateNavDisplay(player, evil) {
 }
 
 export function updateCellUI(element, hom) {
+	if (!element) return;
 	let isSelected = element.classList.contains('active');
 	if (isSelected) {
 		return;
@@ -45,7 +46,13 @@ function colorShips(cell) {
 	}
 }
 
+export function clearBoard(currBoard) {
+	playerGameboardEl.textContent = '';
+	return;
+}
+
 export function renderGameboard(currBoard) {
+	let ships = ['Carrier', 'Destroyer', 'Submarine', 'Cruiser', 'Battleship'];
 	currBoard.board.board.forEach((row, rowIndex) => {
 		row.forEach((cell, colIndex) => {
 			let newDivElement = document.createElement('div');
@@ -56,9 +63,18 @@ export function renderGameboard(currBoard) {
 			if (currBoard.board.name == 'player') {
 				playerGameboardEl.appendChild(newDivElement);
 				newDivElement.classList.add('player-cell');
-				if (cell) {
-					newDivElement.classList.add('ship');
-					colorShips(newDivElement);
+				for (let s of ships) {
+					if (cell == s) {
+						newDivElement.classList.add('ship');
+						colorShips(newDivElement);
+					}
+					if (cell == 'x') {
+						updateCellUI(newDivElement, false);
+					}
+					if (cell == 'x!') {
+						// newDivElement.classList.add('active');
+						updateCellUI(newDivElement, true);
+					}
 				}
 			} else {
 				newDivElement.classList.add('enemy');
