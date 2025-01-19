@@ -21,7 +21,7 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 			if (cell.classList.contains('active')) {
 				setTimeout(() => {
 					cpuTurn(realPlayer, enemyPlayer);
-				}, 800);
+				}, 700);
 			}
 			return cell;
 		}
@@ -35,12 +35,12 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 	}
 }
 
-export function game() {
+export function game(p1) {
 	// init players
-	const realPlayer = new Player('player');
+	const realPlayer = p1;
 	const enemyPlayer = new Player();
 	let enemyBoardEl = document.getElementById('computer-gameboard');
-	randomizeShipCoordinates(realPlayer, enemyPlayer);
+	randomizeShipCoordinates(enemyPlayer);
 	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
 	updateNavDisplay(realPlayer, enemyPlayer);
@@ -60,7 +60,9 @@ export function game() {
 			return;
 		}
 
-		cpuTurn(realPlayer, enemyPlayer);
+		setTimeout(() => {
+			cpuTurn(realPlayer, enemyPlayer);
+		}, 700);
 	});
 }
 
@@ -85,30 +87,31 @@ function checkHit(status, currBoard) {
 		}
 		return true;
 	}
+	return { enemyPlayer, realPlayer };
 }
 
-function randomizeShipCoordinates(realPlayer, enemyPlayer) {
-	realPlayer.board.setShip(0, 0, 'Carrier', randomOrientation());
-	realPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Cruiser',
-		randomOrientation()
-	);
-	realPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Destroyer',
-		randomOrientation()
-	);
-	realPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
+function randomizeShipCoordinates(enemyPlayer, realPlayer) {
+	// realPlayer.board.setShip(0, 0, 'Carrier', randomOrientation());
+	// realPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Cruiser',
+	// 	randomOrientation()
+	// );
+	// realPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Destroyer',
+	// 	randomOrientation()
+	// );
+	// realPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
 
-	realPlayer.board.setShip(
-		randomNumber(),
-		randomNumber(),
-		'Battleship',
-		randomOrientation()
-	);
+	// realPlayer.board.setShip(
+	// 	randomNumber(),
+	// 	randomNumber(),
+	// 	'Battleship',
+	// 	randomOrientation()
+	// );
 
 	// randomly set computer ships on gameboard
 	enemyPlayer.board.setShip(
@@ -137,5 +140,3 @@ function randomizeShipCoordinates(realPlayer, enemyPlayer) {
 		randomOrientation()
 	);
 }
-
-game();

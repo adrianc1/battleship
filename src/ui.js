@@ -31,7 +31,7 @@ export function updateCellUI(element, hom) {
 		return;
 	} else if (hom) {
 		element.classList.add('active');
-		element.textContent = 'Hit!';
+		element.textContent = 'Hit';
 		element.classList.remove('ship-color');
 	} else if (!hom) {
 		element.classList.add('active');
@@ -55,7 +55,7 @@ export function renderGameboard(currBoard) {
 
 			if (currBoard.board.name == 'player') {
 				playerGameboardEl.appendChild(newDivElement);
-				newDivElement.classList.add('player');
+				newDivElement.classList.add('player-cell');
 				if (cell) {
 					newDivElement.classList.add('ship');
 					colorShips(newDivElement);
@@ -74,7 +74,6 @@ export function displayAttackInformation(currBoard, status) {
 
 	if (currBoard.board.name == 'player') {
 		if (status) {
-			if (currBoard.)
 			pb.textContent = `Hit!`;
 		} else {
 			pb.textContent = 'Miss!';
