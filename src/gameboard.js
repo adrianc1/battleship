@@ -34,12 +34,26 @@ export class Gameboard {
 	// set ship on board
 	setShip(row, col, ship, isHorizontal) {
 		// check if ship is valid
+
 		if (this.ships.hasOwnProperty(ship)) {
 			if (this.validPlacement(row, col, ship, isHorizontal)) {
 				this.placeShipAt(row, col, ship, isHorizontal);
 				return true;
 			} else {
-				console.log('invalid spot!');
+				if (this.name == 'enemy') {
+					let placed = false;
+
+					while (!placed) {
+						const r = Math.floor(Math.random() * 9);
+						const c = Math.floor(Math.random() * 9);
+						const h = Math.random() < 0.5;
+
+						if (this.validPlacement(r, c, ship, h)) {
+							this.placeShipAt(r, c, ship, h);
+							placed = true;
+						}
+					}
+				}
 				return false;
 			}
 		}

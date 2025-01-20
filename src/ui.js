@@ -1,6 +1,4 @@
-const playerContainer = document.getElementById('player-main');
 const playerGameboardEl = document.getElementById('player-gameboard');
-const computerContainer = document.getElementById('computer-main');
 const computerGameboardEl = document.getElementById('computer-gameboard');
 
 // display nav and scoring
@@ -25,16 +23,16 @@ export function updateNavDisplay(player, evil) {
 	ENEMY_SHIPS_REMAINING.textContent = `Enemy Ships Remaining: ${evil.board.shipsRemaining()} `;
 }
 
-export function updateCellUI(element, hom) {
+export function updateCellUI(element, isHitSuccessful) {
 	if (!element) return;
-	let isSelected = element.classList.contains('active');
-	if (isSelected) {
+	let isActive = element.classList.contains('active');
+	if (isActive) {
 		return;
-	} else if (hom) {
+	} else if (isHitSuccessful) {
 		element.classList.add('active');
-		element.textContent = 'Hit';
+		element.textContent = '';
 		element.classList.remove('ship-color');
-	} else if (!hom) {
+	} else if (!isHitSuccessful) {
 		element.classList.add('active');
 		element.classList.add('miss');
 	}
@@ -44,10 +42,15 @@ function colorShips(cell) {
 	if (cell.classList.contains('ship')) {
 		cell.classList.add('ship-color');
 	}
+	return;
 }
 
 export function clearBoard(currBoard) {
-	playerGameboardEl.textContent = '';
+	if (currBoard.board.name == 'player') {
+		playerGameboardEl.textContent = '';
+		return;
+	}
+	computerGameboardEl.textContent = '';
 	return;
 }
 
@@ -67,18 +70,29 @@ export function renderGameboard(currBoard) {
 					if (cell == s) {
 						newDivElement.classList.add('ship');
 						colorShips(newDivElement);
-					}
-					if (cell == 'x') {
+					} else if (cell == 'x') {
 						updateCellUI(newDivElement, false);
-					}
-					if (cell == 'x!') {
-						// newDivElement.classList.add('active');
+					} else if (cell == 'x!') {
+						newDivElement.classList.add('ship');
+						newDivElement.classList.add('active');
 						updateCellUI(newDivElement, true);
 					}
 				}
 			} else {
-				newDivElement.classList.add('enemy');
 				computerGameboardEl.appendChild(newDivElement);
+				newDivElement.classList.add('enemy');
+
+				for (let s of ships) {
+					if (cell == s) {
+						newDivElement.classList.add('ship');
+						// colorShips(newDivElement);
+					} else if (cell == 'x') {
+						updateCellUI(newDivElement, false);
+					} else if (cell == 'x!') {
+						// newDivElement.classList.add('active');
+						updateCellUI(newDivElement, true);
+					}
+				}
 			}
 		});
 	});

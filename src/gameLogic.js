@@ -38,12 +38,11 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 	}
 }
 
-export function game(realPlayer) {
-	const enemyPlayer = new Player();
+export function game(realPlayer, enemyPlayer) {
 	let enemyBoardEl = document.getElementById('computer-gameboard');
 	randomizeShipCoordinates(enemyPlayer);
+	clearBoard(enemyPlayer);
 	renderGameboard(enemyPlayer);
-
 	updateNavDisplay(realPlayer, enemyPlayer);
 
 	enemyBoardEl.addEventListener('click', (e) => {
@@ -79,40 +78,20 @@ function checkHit(status, currBoard) {
 	displayAttackInformation(currBoard, status);
 	if (status) {
 		const check = currBoard.board.shipsRemaining();
+		const modalWindow = document.getElementById('main-modal-container');
 		if (check == 'All ships sunk!') {
 			if (currBoard.board.name == 'player') {
-				alert('GAME OVER, YOU LOSE!!!');
+				modalWindow.style.display = block;
 				return;
 			}
-			alert('game over!!, YOU WIN!!!');
+			modalWindow.style.display = 'block';
 		}
 		return true;
 	}
 }
 
-function randomizeShipCoordinates(enemyPlayer, realPlayer) {
-	// realPlayer.board.setShip(0, 0, 'Carrier', randomOrientation());
-	// realPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Cruiser',
-	// 	randomOrientation()
-	// );
-	// realPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Destroyer',
-	// 	randomOrientation()
-	// );
-	// realPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
-
-	// realPlayer.board.setShip(
-	// 	randomNumber(),
-	// 	randomNumber(),
-	// 	'Battleship',
-	// 	randomOrientation()
-	// );
-
+function randomizeShipCoordinates(enemyPlayer) {
+	console.log(enemyPlayer, 'ENENENENENENE');
 	// randomly set computer ships on gameboard
 	enemyPlayer.board.setShip(
 		randomNumber(),
@@ -120,19 +99,23 @@ function randomizeShipCoordinates(enemyPlayer, realPlayer) {
 		'Carrier',
 		randomOrientation()
 	);
+
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
 		'Cruiser',
 		randomOrientation()
 	);
+
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
 		'Destroyer',
 		randomOrientation()
 	);
+
 	enemyPlayer.board.setShip(randomNumber(), randomNumber(), 'Submarine');
+
 	enemyPlayer.board.setShip(
 		randomNumber(),
 		randomNumber(),
