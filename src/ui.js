@@ -30,6 +30,8 @@ export function updateCellUI(element, isHitSuccessful) {
 		return;
 	} else if (isHitSuccessful) {
 		element.classList.add('active');
+		element.classList.add('ship');
+
 		element.textContent = '';
 		element.classList.remove('ship-color');
 	} else if (!isHitSuccessful) {
@@ -55,6 +57,7 @@ export function clearBoard(currBoard) {
 }
 
 export function renderGameboard(currBoard) {
+	clearBoard(currBoard);
 	let ships = ['Carrier', 'Destroyer', 'Submarine', 'Cruiser', 'Battleship'];
 	currBoard.board.board.forEach((row, rowIndex) => {
 		row.forEach((cell, colIndex) => {
@@ -115,4 +118,30 @@ export function displayAttackInformation(currBoard, status) {
 			eb.textContent = 'Miss!';
 		}
 	}
+}
+
+export function resetBoard(player, enemy) {
+	const modal = document.getElementById('main-modal-container');
+
+	player.board.board.forEach((row, rowIndex) => {
+		row.forEach((cell, colIndex) => {
+			player.board.board[rowIndex][colIndex] = null;
+		});
+	});
+
+	player.board.totalHits = 0;
+	player.board.misses = 0;
+
+	enemy.board.board.forEach((row, rowIndex) => {
+		row.forEach((cell, colIndex) => {
+			enemy.board.board[rowIndex][colIndex] = null;
+		});
+	});
+	enemy.board.totalHits = 0;
+	enemy.board.misses = 0;
+	enemy.board.shipsRemaining();
+
+	updateNavDisplay(player, enemy);
+
+	modal.style.display = 'none';
 }

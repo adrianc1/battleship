@@ -1,15 +1,13 @@
-import { Player } from './gameboard.js';
 import {
 	updateCellUI,
 	renderGameboard,
 	updateNavDisplay,
 	displayAttackInformation,
-	clearBoard,
 } from './ui.js';
 
 export function cpuTurn(realPlayer, enemyPlayer) {
-	clearBoard(realPlayer);
 	renderGameboard(realPlayer);
+	renderGameboard(enemyPlayer);
 	let row = Math.floor(Math.random() * 10);
 	let col = Math.floor(Math.random() * 10);
 	let attackStatus = realPlayer.board.receiveAttack(row, col);
@@ -41,8 +39,6 @@ export function cpuTurn(realPlayer, enemyPlayer) {
 export function game(realPlayer, enemyPlayer) {
 	let enemyBoardEl = document.getElementById('computer-gameboard');
 	randomizeShipCoordinates(enemyPlayer);
-	clearBoard(enemyPlayer);
-	renderGameboard(enemyPlayer);
 	updateNavDisplay(realPlayer, enemyPlayer);
 
 	enemyBoardEl.addEventListener('click', (e) => {

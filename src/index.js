@@ -1,79 +1,99 @@
 import { game } from './gameLogic.js';
 import { Player } from './gameboard.js';
-import { renderGameboard, clearBoard } from './ui.js';
+import { renderGameboard, clearBoard, resetBoard } from './ui.js';
 import './styling/style.css';
 
-const REAL_PLAYER = new Player('player');
-const ENEMY_PLAYER = new Player('enemy');
-renderGameboard(REAL_PLAYER);
-renderGameboard(ENEMY_PLAYER);
-let shipArray = [];
+function initPlayers() {
+	const REAL_PLAYER = new Player('player');
+	const ENEMY_PLAYER = new Player('enemy');
+	renderGameboard(REAL_PLAYER);
+	renderGameboard(ENEMY_PLAYER);
 
-for (let ship in REAL_PLAYER.board.ships) {
-	shipArray.push(ship);
+	return {
+		REAL_PLAYER,
+		ENEMY_PLAYER,
+	};
 }
 
-function dQ(arr) {
+function queueShips() {
+	let shipArray = [];
+	for (let ship in new Player().board.ships) {
+		shipArray.push(ship);
+	}
+	return {
+		shipArray,
+	};
+}
+
+function dequeueShips(arr) {
 	const dequeueShip = arr.shift();
 	return dequeueShip;
 }
 
-function updateBoard(isHorizontal = true) {
-	const horBtn = document.getElementById('hor-btn');
-	horBtn.textContent = 'Horizontal';
+const state = {
+	isHorizontal: true,
+};
 
-	clearBoard(REAL_PLAYER);
-	renderGameboard(REAL_PLAYER);
+function updateBoard(state, shipArray, player) {
+	renderGameboard(player);
+	let ship = dequeueShips(shipArray);
 
-	horBtn.addEventListener('click', () => {
-		if (isHorizontal == true) {
-			horBtn.textContent = ' Vertical';
-			isHorizontal = false;
-		} else {
-			console.log('it aint ');
-			horBtn.textContent = 'Horizontal';
-			isHorizontal = true;
-		}
-	});
+	shipOrientation(state);
 
 	// Re-select cells and reattach listeners after rendering
+	addShipsToBoard(player, shipArray, ship, state);
+}
+
+function addShipsToBoard(player, shipArray, ship, state) {
 	const CELLS = document.querySelectorAll('.player-cell');
 	CELLS.forEach((cell) => {
 		cell.addEventListener('click', (e) => {
 			if (
-				!REAL_PLAYER.board.setShip(
+				!player.board.setShip(
 					Number(e.target.dataset.row),
 					Number(e.target.dataset.col),
 					ship,
-					isHorizontal
+					state.isHorizontal
 				)
 			) {
 				return;
 			}
-
-			// Update ship and log the result
-
-			ship = dQ(shipArray);
-			updateBoard();
+			updateBoard(state, shipArray, player);
 		});
 	});
 }
+function shipOrientation(state) {
+	const HORIZONTAL_BTN = document.getElementById('hor-btn');
+	HORIZONTAL_BTN.addEventListener('click', () => {
+		state.isHorizontal = !state.isHorizontal;
+		HORIZONTAL_BTN.textContent = state.isHorizontal ? 'Horizontal' : 'Vertical';
+	});
+}
 
-const startGameBtn = document.getElementById('start-game-btn');
-const resetGameBtn = document.getElementById('restart-btn');
-startGameBtn.addEventListener('click', () => {
-	if (shipArray.length > 0) {
+const gameControllers = (shipArray, players) => {
+	const HORIZONTAL_BTN = document.getElementById('hor-btn');
+	const START_GAME_BTN = document.getElementById('start-game-btn');
+	const RESET_GAME_BTN = document.getElementById('restart-btn');
+
+	START_GAME_BTN.addEventListener('click', () => {
+		if (shipArray.length > 0) {
+			return;
+		}
+		START_GAME_BTN.textContent = 'Attack In Progress';
+		HORIZONTAL_BTN.style.display = 'none';
+		game(players.REAL_PLAYER, players.ENEMY_PLAYER);
 		return;
-	}
-	game(REAL_PLAYER, ENEMY_PLAYER);
-});
-resetGameBtn.addEventListener('click', () => {
-	clearBoard(REAL_PLAYER);
-	clearBoard(ENEMY_PLAYER);
-	renderGameboard(REAL_PLAYER);
-	renderGameboard(ENEMY_PLAYER);
-	updateBoard();
-});
+	});
 
-let ship = dQ(shipArray);
-updateBoard(); // Initial call
+	RESET_GAME_BTN.addEventListener('click', () => {
+		location.reload();
+	});
+};
+
+(function init() {
+	let players = initPlayers();
+	let shipArray = queueShips().shipArray;
+
+	updateBoard(state, shipArray, players.REAL_PLAYER);
+	gameControllers(shipArray, players);
+})();
