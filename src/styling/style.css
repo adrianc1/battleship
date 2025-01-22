@@ -119,7 +119,7 @@ body {
 .gb {
 	display: grid;
 	aspect-ratio: 1;
-	border: 9px solid navy;
+	border: 9px solid rgb(0, 0, 0);
 	width: 100%;
 	max-width: 550px;
 	grid-template-columns: repeat(10, 1fr);
