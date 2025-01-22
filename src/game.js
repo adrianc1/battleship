@@ -38,7 +38,7 @@ const state = {
 	isHorizontal: true,
 };
 
-function updateBoard(state, shipArray, player) {
+const updateBoard = (state, shipArray, player) => {
 	renderGameboard(player);
 	let ship = dequeueShips(shipArray);
 	const HORIZONTAL_BTN = document.getElementById('hor-btn');
@@ -50,17 +50,14 @@ function updateBoard(state, shipArray, player) {
 	}
 
 	addShipsToBoard(player, shipArray, ship, state);
-}
+};
 
 const toggleOrientation = (e) => {
-	const HORIZONTAL_BTN = document.getElementById('hor-btn');
-	console.log('before switch', state.isHorizontal);
 	state.isHorizontal = !state.isHorizontal;
-	console.log('after switch', state.isHorizontal);
 	e.target.textContent = state.isHorizontal ? 'Horizontal' : 'Vertical';
 };
 
-function addShipsToBoard(player, shipArray, ship, state) {
+const addShipsToBoard = (player, shipArray, ship, state) => {
 	const CELLS = document.querySelectorAll('.player-cell');
 	CELLS.forEach((cell) => {
 		cell.addEventListener('click', (e) => {
@@ -77,7 +74,7 @@ function addShipsToBoard(player, shipArray, ship, state) {
 			updateBoard(state, shipArray, player);
 		});
 	});
-}
+};
 
 const gameControllers = (shipArray, players) => {
 	const HORIZONTAL_BTN = document.getElementById('hor-btn');
@@ -130,7 +127,7 @@ const cpuTurn = (realPlayer, enemyPlayer) => {
 	}
 };
 
-function game(realPlayer, enemyPlayer) {
+const game = (realPlayer, enemyPlayer) => {
 	let enemyBoardEl = document.getElementById('computer-gameboard');
 	randomizeShipCoordinates(enemyPlayer);
 	updateNavDisplay(realPlayer, enemyPlayer);
@@ -154,17 +151,17 @@ function game(realPlayer, enemyPlayer) {
 			cpuTurn(realPlayer, enemyPlayer);
 		}, 700);
 	});
-}
+};
 
-function randomNumber() {
+const randomNumber = () => {
 	return Math.floor(Math.random() * 9);
-}
+};
 
-function randomOrientation() {
+const randomOrientation = () => {
 	return Math.random() < 0.5;
-}
+};
 
-function checkHit(status, currBoard) {
+const checkHit = (status, currBoard) => {
 	displayAttackInformation(currBoard, status);
 	if (status) {
 		const check = currBoard.board.shipsRemaining();
@@ -178,9 +175,9 @@ function checkHit(status, currBoard) {
 		}
 		return true;
 	}
-}
+};
 
-function randomizeShipCoordinates(enemyPlayer) {
+const randomizeShipCoordinates = (enemyPlayer) => {
 	console.log(enemyPlayer, 'ENENENENENENE');
 	// randomly set computer ships on gameboard
 	enemyPlayer.board.setShip(
@@ -212,6 +209,6 @@ function randomizeShipCoordinates(enemyPlayer) {
 		'Battleship',
 		randomOrientation()
 	);
-}
+};
 
 export { gameControllers, updateBoard, initPlayers, queueShips, state };

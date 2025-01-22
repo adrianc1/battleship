@@ -4,14 +4,12 @@ import {
 	initPlayers,
 	queueShips,
 	state,
-} from './gameLogic.js';
+} from './game.js';
 import './styling/style.css';
 
-function init() {
+(function init() {
 	let players = initPlayers();
 	let shipArray = queueShips().shipArray;
 	updateBoard(state, shipArray, players.REAL_PLAYER);
 	gameControllers(shipArray, players);
-}
-
-init();
+})();
