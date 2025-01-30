@@ -16,8 +16,8 @@ class Ship {
 }
 
 class Gameboard {
-	constructor() {
-		// this.name = name;
+	constructor(name) {
+		this.name = name;
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
 		this.ships = {
 			Carrier: new Ship(5, 0),
@@ -40,7 +40,7 @@ class Gameboard {
 				this.placeShipAt(row, col, ship, isHorizontal);
 				return true;
 			} else {
-				if (this.name == 'enemy') {
+				if (this.name !== 'player') {
 					let placed = false;
 
 					while (!placed) {
@@ -51,6 +51,7 @@ class Gameboard {
 						if (this.validPlacement(r, c, ship, h)) {
 							this.placeShipAt(r, c, ship, h);
 							placed = true;
+							return;
 						}
 					}
 				}
