@@ -1,4 +1,4 @@
-export class Ship {
+class Ship {
 	constructor(len, hits, sunk = false) {
 		(this.len = len), (this.hits = hits), (this.sunk = sunk);
 	}
@@ -15,9 +15,9 @@ export class Ship {
 	}
 }
 
-export class Gameboard {
-	constructor(name = null) {
-		this.name = name;
+class Gameboard {
+	constructor() {
+		// this.name = name;
 		this.board = Array.from({ length: 10 }, () => new Array(10).fill(null));
 		this.ships = {
 			Carrier: new Ship(5, 0),
@@ -169,8 +169,11 @@ export class Gameboard {
 		return true;
 	}
 }
-export class Player {
+class Player {
 	constructor(name) {
 		this.board = new Gameboard(name);
+		this.name = name;
 	}
 }
+
+export { Player, Gameboard, Ship };

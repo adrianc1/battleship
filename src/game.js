@@ -7,7 +7,7 @@ import {
 
 import { Player } from './gameboard.js';
 
-function initPlayers() {
+const initPlayers = () => {
 	const REAL_PLAYER = new Player('player');
 	const ENEMY_PLAYER = new Player('enemy');
 	renderGameboard(REAL_PLAYER);
@@ -17,9 +17,9 @@ function initPlayers() {
 		REAL_PLAYER,
 		ENEMY_PLAYER,
 	};
-}
+};
 
-function queueShips() {
+const queueShips = () => {
 	let shipArray = [];
 	for (let ship in new Player().board.ships) {
 		shipArray.push(ship);
@@ -27,12 +27,12 @@ function queueShips() {
 	return {
 		shipArray,
 	};
-}
+};
 
-function dequeueShips(arr) {
+const dequeueShips = (arr) => {
 	const dequeueShip = arr.shift();
 	return dequeueShip;
-}
+};
 
 const state = {
 	isHorizontal: true,
@@ -42,7 +42,6 @@ const updateBoard = (state, shipArray, player) => {
 	renderGameboard(player);
 	let ship = dequeueShips(shipArray);
 	const HORIZONTAL_BTN = document.getElementById('hor-btn');
-	console.log('before CLICKING', state.isHorizontal);
 
 	if (!HORIZONTAL_BTN.dataset.listenerAttached) {
 		HORIZONTAL_BTN.addEventListener('click', toggleOrientation);
@@ -96,7 +95,7 @@ const gameControllers = (shipArray, players) => {
 	});
 };
 
-const cpuTurn = (realPlayer, enemyPlayer) => {
+const enemyTurn = (realPlayer, enemyPlayer) => {
 	renderGameboard(realPlayer);
 	renderGameboard(enemyPlayer);
 	let row = Math.floor(Math.random() * 10);
@@ -112,7 +111,7 @@ const cpuTurn = (realPlayer, enemyPlayer) => {
 		) {
 			if (cell.classList.contains('active')) {
 				setTimeout(() => {
-					cpuTurn(realPlayer, enemyPlayer);
+					enemyTurn(realPlayer, enemyPlayer);
 				}, 700);
 			}
 			return cell;
@@ -123,7 +122,7 @@ const cpuTurn = (realPlayer, enemyPlayer) => {
 	updateNavDisplay(realPlayer, enemyPlayer);
 
 	if (checkHit(attackStatus, realPlayer)) {
-		cpuTurn(realPlayer, enemyPlayer);
+		enemyTurn(realPlayer, enemyPlayer);
 	}
 };
 
@@ -148,7 +147,7 @@ const game = (realPlayer, enemyPlayer) => {
 		}
 
 		setTimeout(() => {
-			cpuTurn(realPlayer, enemyPlayer);
+			enemyTurn(realPlayer, enemyPlayer);
 		}, 700);
 	});
 };

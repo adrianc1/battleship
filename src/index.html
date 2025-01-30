@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Doto:wght@100..900&family=Tiny5&display=swap"
+			rel="stylesheet"
+		/>
+		<title>Battle Ship!</title>
+	</head>
+	<body>
+		<div id="main-modal-container">
+			<div id="modal-content">
+				<div id="gameover-modal">GAMEOVER!</div>
+				<button id="restart-btn">Restart</button>
+			</div>
+		</div>
+		<div id="top-div">
+			<h1 id="game-title">BAT<br />TLE <br />SHIP!</h1>
+			<div id="nav-bar">
+				<div id="player-nav" class="nav-bar-class">
+					<p id="player-hits">Player Received Hits:</p>
+					<p id="player-misses">Player Misses:</p>
+					<p id="player-ships-remaining">Player Ships Remaining:</p>
+				</div>
+				<div id="enemy-nav" class="nav-bar-class">
+					<p id="enemy-hits">Enemy Received Hits:</p>
+					<p id="enemy-misses">Enemy Misses:</p>
+					<p id="enemy-ships-remaining">Enemy Ships Remaining:</p>
+				</div>
+			</div>
+		</div>
+
+		<div id="main-container">
+			<div id="player-main">
+				<div id="player-board-container" class="board-canvas">
+					<div class="attack-status-container">
+						<h2 id="player-board-header">Allied Territory</h2>
+						<h3 id="attack-status-pb" class="attack-status"></h3>
+					</div>
+					<div id="player-gameboard" class="gb"></div>
+				</div>
+			</div>
+
+			<div id="button-container">
+				<button id="hor-btn">Horizontal</button>
+				<button id="start-game-btn">Start Game</button>
+			</div>
+
+			<div id="computer-main">
+				<div id="computer-gameboard-container" class="board-canvas">
+					<div class="attack-status-container">
+						<h2 id="enemy-board-header">Enemy Territory</h2>
+						<h3 id="attack-status-eb" class="attack-status"></h3>
+					</div>
+					<div id="computer-gameboard" class="gb"></div>
+				</div>
+			</div>
+		</div>
+		<!-- <script src="bundle.js"></script> -->
+	</body>
+</html>

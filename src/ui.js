@@ -48,7 +48,7 @@ function colorShips(cell) {
 }
 
 export function clearBoard(currBoard) {
-	if (currBoard.board.name == 'player') {
+	if (currBoard.name == 'player') {
 		playerGameboardEl.textContent = '';
 		return;
 	}
@@ -66,7 +66,7 @@ export function renderGameboard(currBoard) {
 			newDivElement.dataset.row = rowIndex;
 			newDivElement.dataset.col = colIndex;
 
-			if (currBoard.board.name == 'player') {
+			if (currBoard.name == 'player') {
 				playerGameboardEl.appendChild(newDivElement);
 				newDivElement.classList.add('player-cell');
 				for (let s of ships) {
@@ -88,11 +88,11 @@ export function renderGameboard(currBoard) {
 				for (let s of ships) {
 					if (cell == s) {
 						newDivElement.classList.add('ship');
-						// colorShips(newDivElement);
+						colorShips(newDivElement);
 					} else if (cell == 'x') {
 						updateCellUI(newDivElement, false);
 					} else if (cell == 'x!') {
-						// newDivElement.classList.add('active');
+						newDivElement.classList.add('active');
 						updateCellUI(newDivElement, true);
 					}
 				}
